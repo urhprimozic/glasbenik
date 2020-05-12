@@ -1,5 +1,5 @@
-# Pametni github je sem dodal ves balast,razen tistega , kar rabim
-envs/
+#testne datoteke
+test-ignored.py
 
 # Environments
 .env
@@ -9,7 +9,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+# Pametni github je sem dodal ves balast,razen tistega , kar rabim
+envs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
