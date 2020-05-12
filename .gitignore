@@ -1,6 +1,9 @@
 #testne datoteke
 test-ignored.py
 
+#vs code
+.vscode/
+
 # Environments
 .env
 .venv
