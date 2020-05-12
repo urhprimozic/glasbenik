@@ -18,10 +18,10 @@ class Predvajalnik:
     def __init__(self):
         self.trenutna_pesem = None
 
-        #zažene vlc
-        self.vlc_instance = vlc.Instance() # Običaj za poimenovanje te spremenljivkle je instance, prevod bi bil čuden
+        # zažene vlc
+        # Običaj za poimenovanje te spremenljivkle je instance, prevod bi bil čuden
+        self.vlc_instance = vlc.Instance()
         self.vlc_predvajalnik = self.vlc_instance.media_player_new()
-        
 
     def predvajaj_url(self, url):
         '''
@@ -30,7 +30,7 @@ class Predvajalnik:
         '''
         # pafy poišče najbolšo kvaliteto za prenos v živo
         kvaliteten_url = pafy.new(url).getbest().url
-        
+
         # vlc magija
         media = self.vlc_instance.media_new(kvaliteten_url)
         media.get_mrl()
@@ -38,7 +38,6 @@ class Predvajalnik:
 
         # predvajaj
         self.vlc_predvajalnik.play()
-
 
 
 
