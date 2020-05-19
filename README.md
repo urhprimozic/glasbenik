@@ -14,7 +14,7 @@ Sicer pa potrebuješ:
 * **bottle** (*bo verjetno že dodan*)
 
 ## Ideja
-Na čase v svojem življenju čutim potrebo po specifični glasbi (politično nekorekten rap in death metal, ki ga poslušam na treningih mogoče ni najboljša glasbena izbira za babico, ki jo peljem po nakupih). Radio postaje imajo po večini preveč širok spekter žanrov in ponavljajoče skladbe za mojo rabo. Prav tako mi ne ustrezajo domače baze skladb, saj so premajhne in imam večen problem z dodajanjem novih vsebin. Vse moje potrebe sicer zagotavljajo novodobne aplikacije za predvajanje glasbe (Google Music, Spotify), ki pa so zaradi cene neugodne za ubogega študenta matematike.
+Na čase v svojem življenju čutim potrebo po specifični glasbi (politično nekorekten rap in death metal, ki ga poslušam na treningih mogoče ni najboljša glasbena izbira za babico, ki jo peljem po nakupih). Radio postaje imajo po večini preveč širok spekter žanrov in ponavljajoče skladbe za mojo rabo. Prav tako mi ne ustrezajo domače baze skladb, saj so premajhne in imam večen problem z dodajanjem novih vsebin. Vse moje želje sicer izpolnjeno novodobne aplikacije za predvajanje glasbe (Google Music, Spotify), ki pa so zaradi cene neugodne za ubogega študenta matematike.
 
 Klasična rešitev je predvajanje glasbe iz youtuba, ki pa ima svoje težave.
 1. Med posameznimi skladbami nas motijo dolgi oglasi.
@@ -24,7 +24,7 @@ Klasična rešitev je predvajanje glasbe iz youtuba, ki pa ima svoje težave.
 Rešitev teh težav bi bil sistem, ki bi za glasbeno bazo jemal youtube, vendar imel izboljšane funkcije (1-3).
 
 ## Funkcije
-GLavna funckija je predvajanje glasbe iz youtuba v živo. Za to bo uporabljal modula **pafy** in **vlc**, mogoče pa *celo s funckijami brskalnika.*
+Glavna funckija je predvajanje glasbe iz youtuba v živo. Za to bo uporabljal modula **pafy** in **vlc**, mogoče pa *celo s funckijami brskalnika since HTML5*
 
 ### Lokalna baza
 Sistem bi gradil lokalno bazo skladb (le spletnih naslovov, brez dejanskih datotek), po kateri bi iskal hitreje in na kateri bi uporabljal bolše algoritme za predlaganje naslednje skladbe.
