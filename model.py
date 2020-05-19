@@ -1,18 +1,17 @@
-# -*- coding: utf-8 -*-
 # $ Z $ označim komentarji, ki morajo stran PRED ZADNJO VERZIJO
 # $PAZI:
 # $Model ne sme vedet za vmesnik
 # $slovenske spremenljivke
-import vlc
 import pafy
+import vlc
 
 
-# $TODO: Združi te razrede!??
+
 class Predvajalnik:
     '''
     Poskrbi za magijo z moduloma vlc in pafy, da predvaja glasbo iz spletnega naslova.
     Trenutno zna:
-        > Nič
+        > predvajaj_url(url)
     '''
 
     def __init__(self):
@@ -26,7 +25,8 @@ class Predvajalnik:
     def predvajaj_url(self, url):
         '''
         Predvaja glasbo iz posnetka, ki se nahaja na spletnem naslovu url.
-        TODO: Preveri internetno povezavo, preveri url
+        TODO: Trenutno odpre okno
+        Preveri internetno povezavo, preveri url
         '''
         # pafy poišče najbolšo kvaliteto za prenos v živo
         kvaliteten_url = pafy.new(url).getbest().url
@@ -38,7 +38,6 @@ class Predvajalnik:
 
         # predvajaj
         self.vlc_predvajalnik.play()
-
 
 
 class Lokalni_iskalnik:
