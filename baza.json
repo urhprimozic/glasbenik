@@ -1,6 +1,176 @@
-{
-    "url": "https://www.youtube.com/watch?v=mjpkgAD1KlE",
-    "avtor": "Elvis Jackson Official",
-    "dolzina": "00:03:42",
-    "naslov": "Elvis Jackson: This Time (official music video)"
-}
+[
+    {
+        "url": "https://www.youtube.com/watch?v=mjpkgAD1KlE\n",
+        "avtor": "Elvis Jackson Official",
+        "dolzina": "00:03:42",
+        "naslov": "Elvis Jackson: This Time (official music video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=2Pgl-JC2sgk\n",
+        "avtor": "TooDamnFilthy",
+        "dolzina": "00:02:23",
+        "naslov": "PINK GUY - セックス大好き"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ\n",
+        "avtor": "RickAstleyVEVO",
+        "dolzina": "00:03:32",
+        "naslov": "Rick Astley - Never Gonna Give You Up (Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=EarzLr1tWyw\n",
+        "avtor": "Menart Records sLOVEnia",
+        "dolzina": "00:04:19",
+        "naslov": "Žiga Jan - Poln strahu, da ima nekdo te drug (Official Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=TEMigjbTje4\n",
+        "avtor": "Iskreni Kreteni",
+        "dolzina": "00:05:40",
+        "naslov": "Iskreni Kreteni - A kdaj pokličeš koga le ko si pijan"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=6kw7Qh4m_Wg\n",
+        "avtor": "Iskreni Kreteni",
+        "dolzina": "00:02:59",
+        "naslov": "Iskreni Kreteni-Kriško nebo"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=Ph-CA_tu5KA\n",
+        "avtor": "Rammstein Official",
+        "dolzina": "00:03:36",
+        "naslov": "Rammstein - Links 2 3 4 (Official Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=EOnSh3QlpbQ\n",
+        "avtor": "Rammstein Official",
+        "dolzina": "00:04:06",
+        "naslov": "Rammstein - Ich Will (Official Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=60ItHLz5WEA\n",
+        "avtor": "Alan Walker",
+        "dolzina": "00:03:33",
+        "naslov": "Alan Walker - Faded"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=1-xGerv5FOk\n",
+        "avtor": "Alan Walker",
+        "dolzina": "00:02:43",
+        "naslov": "Alan Walker - Alone"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=Soa3gO7tL-c\n",
+        "avtor": "Green Day",
+        "dolzina": "00:04:48",
+        "naslov": "Green Day: \"Boulevard Of Broken Dreams\" - [Official Video]"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=NUTGr5t3MoY\n",
+        "avtor": "Green Day",
+        "dolzina": "00:03:13",
+        "naslov": "Green Day - Basket Case [Official Music Video]"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=jPan651rVMs\n",
+        "avtor": "88rising",
+        "dolzina": "00:03:45",
+        "naslov": "Joji - Gimme Love (Official Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=r7gFNaGYEs8\n",
+        "avtor": "jaki386",
+        "dolzina": "00:02:38",
+        "naslov": "Ansambel bratov Avsenik - Na Golici"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=04mfKJWDSzI\n",
+        "avtor": "Gorillaz",
+        "dolzina": "00:04:26",
+        "naslov": "Gorillaz - On Melancholy Hill (Official Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=lVaBvyzuypw\n",
+        "avtor": "Gorillaz",
+        "dolzina": "00:05:58",
+        "naslov": "Gorillaz - Saturnz Barz (Spirit House) 360"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=K09_5IsgGe8\n",
+        "avtor": "88rising",
+        "dolzina": "00:04:36",
+        "naslov": "Joji - Run (Official Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=YWN81V7ojOE\n",
+        "avtor": "88rising",
+        "dolzina": "00:03:12",
+        "naslov": "Joji - Sanctuary (Official Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=PEBS2jbZce4\n",
+        "avtor": "88rising",
+        "dolzina": "00:02:59",
+        "naslov": "Joji - TEST DRIVE"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=Q0oIoR9mLwc\n",
+        "avtor": "Red Hot Chili Peppers",
+        "dolzina": "00:05:04",
+        "naslov": "Red Hot Chili Peppers - Dark Necessities [OFFICIAL VIDEO]"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=Sb5aq5HcS1A\n",
+        "avtor": "Red Hot Chili Peppers",
+        "dolzina": "00:04:48",
+        "naslov": "Red Hot Chili Peppers - Dani California [Official Music Video]"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=8AHCfZTRGiI\n",
+        "avtor": "JohnnyCashVEVO",
+        "dolzina": "00:03:48",
+        "naslov": "Johnny Cash - Hurt (Official Music Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=3JjaxlwShCM\n",
+        "avtor": "Joji - Topic",
+        "dolzina": "00:02:54",
+        "naslov": "YEAH RIGHT"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=HgzGwKwLmgM\n",
+        "avtor": "Queen Official",
+        "dolzina": "00:03:37",
+        "naslov": "Queen - Don't Stop Me Now (Official Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=9HFDW0x10-Q\n",
+        "avtor": "TVFilthyFrank",
+        "dolzina": "00:03:21",
+        "naslov": "TERIYAKI GOD"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=SJfUYTfdoR4\n",
+        "avtor": "Klemen Klemen",
+        "dolzina": "00:04:20",
+        "naslov": "Klemen Klemen - Keš pičke (official video HD)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=OLpeX4RRo28\n",
+        "avtor": "TVFilthyFrank",
+        "dolzina": "00:03:45",
+        "naslov": "PINK GUY - STFU"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=WrjwGPb0Hvw\n",
+        "avtor": "EminemVEVO",
+        "dolzina": "00:04:32",
+        "naslov": "Eminem - Shake That ft. Nate Dogg (Official Music Video)"
+    },
+    {
+        "url": "https://www.youtube.com/watch?v=ExmoTeC3e5g",
+        "avtor": "BigFootMamaOfficial",
+        "dolzina": "00:05:00",
+        "naslov": "Big Foot Mama - Led s severa"
+    }
+]
