@@ -21,11 +21,11 @@ def enostavni_iskalnik(kandidat, geslo):
     for i in geslo:
         for j in kandidat:
             if i == j:
-                vrednost += 5
+                vrednost += 7
             elif i in j:
-                vrednost += 2
+                vrednost += 3
             elif j in i:
-                vrednost += 1
+                vrednost += 0.01
     return vrednost
 
 
@@ -105,10 +105,10 @@ class Seja:
                 rezultati.append((pesem, vrednost))
             # if len(rezultati) < pi: # uporabi boljšo verzijo iskanja
 
-        return sorted(rezultati, key=lambda x: x[1], reverse=True)
+        return [i[0] for i in sorted(rezultati, key=lambda x: x[1], reverse=True)]
 
 
-    def isci_po_youtubu(self, geslo, pi=10):
+    def isci_po_youtubu(self, geslo, pi=10, dodaj_v_bazo=True):
         '''
         Uporabi modul *, in vrne prvih pi rezultatov iskanja v tabeli razredov.
         '''
@@ -121,5 +121,7 @@ class Seja:
             i['naslov'] = i.pop('title')
             i['avtor'] = i.pop('channel')
             i['dolzina'] = i.pop('duration')
+            if dodaj_v_bazo:
+                self.dodaj_url(i['url'])
         return rezultati
 

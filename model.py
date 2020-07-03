@@ -4,6 +4,7 @@
 import pafy
 import vlc
 
+
 class Predvajalnik:
     '''
     Poskrbi za magijo z moduloma vlc in pafy, da predvaja glasbo iz spletnega naslova.
@@ -36,21 +37,8 @@ class Predvajalnik:
         # predvajaj
         self.vlc_predvajalnik.play()
 
+    def pavza(self):
+        self.vlc_predvajalnik.pause()
 
-class Lokalni_iskalnik:
-    '''
-    Glede na geslo zna iskati po lokalni bazi, mogoče tudi predlaga glasbo.
-    '''
-
-    def __init__(self):
-        super().__init__()
-
-
-class Spletni_iskalnik:
-    '''
-    Glede na geslo zna iskati po spletni platformi youtube.
-    '''
-
-    def __init__(self):
-        pass
-
+    def predvajaj(self):
+        self.vlc_predvajalnik.play()
