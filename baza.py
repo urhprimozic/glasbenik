@@ -4,7 +4,29 @@ import pafy
 
 '''  TODO
 >fajli z os (brezveze, dokler ne začnem delat z bottle, ker bom šel takrat delat s piškotki)
+> enostavni iskalnik je počasen. Če je blo do sedaj dovolj gesel ničelnih, itak veš, da pesmi ne bo noter
 '''
+
+
+def enostavni_iskalnik(kandidat, geslo):
+    '''
+    Pogleda, koliko besed iz gelsa se skriva v kandidatu. 
+    Če uporabnik ne dela slovničnih napak, dokaj efektiven pristop.
+    Vrne približno oceno ustreznosti me TODO
+    >>> enostavni_iskalnik(["TooDamnFilthy", "pink", "guy", "sax"],["Filthy", "Frank"])
+    2
+    '''
+    # vrednost pove, koliko je kandidat po tem enostavnem kriteriju podoben geslu
+    vrednost = 0
+    for i in geslo:
+        for j in kandidat:
+            if i == j:
+                vrednost += 5
+            elif i in j:
+                vrednost += 2
+            elif j in i:
+                vrednost += 1
+    return vrednost
 
 
 class Seja:
@@ -60,3 +82,27 @@ class Seja:
         with open(datoteka) as txt:
             for pesem in txt.readlines():
                 self.dodaj_url(pesem)
+
+    def isci_po_bazi(self, iskano_geslo, pi=10):
+        '''
+        Išče skladbe, ki imajo podoben naslov ali avtorja, kot geslo.
+        Vrne seznam parov, kjer je prvi element slovar pesmi, drugi pa vrednost.
+        IDEJA:
+        > najprej predpostavi, da uporabnik zna pisat
+        > nato dela kkšnega levensteina, s tem da mu je vseeno, če spusti druge besede
+        > potem pa https://pythonspot.com/nltk-stemming/  in nimaš več volje do življenja
+
+        '''
+        rezultati = []
+        geslo = iskano_geslo.lower().split()
+        for pesem in self.baza:
+            kandidat = pesem['naslov'].lower().split() + \
+                pesem['avtor'].lower().split()
+            
+            vrednost = enostavni_iskalnik(kandidat, geslo)
+
+            if vrednost != 0:
+                rezultati.append((pesem, vrednost))
+    # if len(rezultati) < pi: # uporabi boljšo verzijo iskanja
+
+        return sorted(rezultati, key=lambda x: x[1], reverse=True)
