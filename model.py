@@ -1,11 +1,8 @@
-# $ Z $ označim komentarji, ki morajo stran PRED ZADNJO VERZIJO
-# $PAZI:
-# $Model ne sme vedet za vmesnik
-# $slovenske spremenljivke
+# PAZI:
+# Model ne sme vedet za vmesnik
+# slovenske spremenljivke
 import pafy
 import vlc
-
-
 
 class Predvajalnik:
     '''
@@ -57,4 +54,3 @@ class Spletni_iskalnik:
     def __init__(self):
         pass
 
-# $Trenutno stanje: Znaš predvajat muzko (predvajalnik) in znaš iskat po obeh bazah (predpostavimo, da lokalni tud predlaga stvari)
