@@ -11,6 +11,7 @@ TODO: `setup.py` ali kaj podobnega, ki pripravi okolje.
 Sicer pa potrebuješ:
 * [modul pafy](https://pypi.org/project/pafy/)
 * [modul vlc](https://pypi.org/project/python-vlc/)
+* [modul youtube-search-python](https://github.com/alexmercerind/youtube-search-python) - modul je še v izdelavi
 * **bottle** (*bo verjetno že dodan*)
 
 ## Ideja

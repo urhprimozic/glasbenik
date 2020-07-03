@@ -1,7 +1,7 @@
 # le zadeve, povezane z grajenjem in iskanjem po bazi
 import json
 import pafy
-
+from youtubesearchpython import searchYoutube
 '''  TODO
 >fajli z os (brezveze, dokler ne začnem delat z bottle, ker bom šel takrat delat s piškotki)
 > enostavni iskalnik je počasen. Če je blo do sedaj dovolj gesel ničelnih, itak veš, da pesmi ne bo noter
@@ -103,6 +103,23 @@ class Seja:
 
             if vrednost != 0:
                 rezultati.append((pesem, vrednost))
-    # if len(rezultati) < pi: # uporabi boljšo verzijo iskanja
+            # if len(rezultati) < pi: # uporabi boljšo verzijo iskanja
 
         return sorted(rezultati, key=lambda x: x[1], reverse=True)
+
+
+    def isci_po_youtubu(self, geslo, pi=10):
+        '''
+        Uporabi modul *, in vrne prvih pi rezultatov iskanja v tabeli razredov.
+        '''
+        print("beta verzija")
+        #tabela z rezultati
+        rezultati = json.loads(searchYoutube(geslo, 1, "json").result())["search_result"]
+        # standrdiziranje imen. TODO ? svoja verzija modula za rezultate?
+        for i in rezultati:
+            i['url'] = i.pop('link')
+            i['naslov'] = i.pop('title')
+            i['avtor'] = i.pop('channel')
+            i['dolzina'] = i.pop('duration')
+        return rezultati
+
