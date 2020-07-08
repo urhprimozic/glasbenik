@@ -1,6 +1,7 @@
 # le zadeve, povezane z grajenjem in iskanjem po bazi
 import json
 import pafy
+import youtube_dl
 from youtubesearchpython import searchYoutube
 '''  TODO
 >fajli z os (brezveze, dokler ne začnem delat z bottle, ker bom šel takrat delat s piškotki)
@@ -23,11 +24,10 @@ def enostavni_iskalnik(kandidat, geslo):
             if i == j:
                 vrednost += 7
             elif i in j:
-                vrednost += 3
-            elif j in i:
-                vrednost += 0.01
+                vrednost += 1
     return vrednost
 
+def leib
 
 class Seja:
     ''' Skrbi za bazo trenutne seje.
@@ -44,27 +44,34 @@ class Seja:
     def dodaj_url(self, url):
         '''Doda pesem, ki se nahaja na spletnem naslovu url, v bazo seje, če je tam še ni.
         Vrne True, če je bila pesem uspešno dodana, drugače vrne False'''
-
-        posnetek = pafy.new(url)
-        slovar = {
-            'url': url,
-            'avtor': posnetek.author,
-            # googlu to ni všeč
-            # 'kategorija' : posnetek.category,
-            # 'kljucne_besede' : posnetek.keywords
-            'dolzina': posnetek.duration,
-            'naslov': posnetek.title,
-        }
-        # preveri, če je pesem že v bazi
-        for pesem in self.baza:
-            if pesem['url'] == url:
-                print('\033[91m'+'Pesem je že v bazi.'+'\033[0m')  # log
-                return False
-        # če pesmi še ni, jo dodamo
-        self.baza.append(slovar)
-        print('\033[92m'+'Pesem uspešno dodana.' +
-              '\033[0m'+' \nNaslov: ' + slovar['naslov'])
-        return True
+        try:
+            posnetek = pafy.new(url)
+            slovar = {
+                'url': url,
+                'avtor': posnetek.author,
+                # googlu to ni všeč
+                # 'kategorija' : posnetek.category,
+                # 'kljucne_besede' : posnetek.keywords
+                'dolzina': posnetek.duration,
+                'naslov': posnetek.title,
+            }
+            # preveri, če je pesem že v bazi
+            for pesem in self.baza:
+                if pesem['url'] == url:
+                    print('\033[91m'+'Pesem je že v bazi.'+'\033[0m')  # log
+                    return False
+            # če pesmi še ni, jo dodamo
+            self.baza.append(slovar)
+            print('\033[92m'+'Pesem uspešno dodana.' +
+                '\033[0m'+' \nNaslov: ' + slovar['naslov'])
+            return True
+        except youtube_dl.utils.ExtractorError:
+            print("   Napaka: pesem ni dosegljiva")
+            return False
+        else:
+            print("Neznana napaka pri klicu na pesem")
+            return False
+        
 
     def posodobi_bazo_na_nasilen_nacin(self):
         '''
@@ -75,7 +82,7 @@ class Seja:
             txt.write(json.dumps(self.baza))
             print("(zloben smeh) hahaha. vaši stari podatki so izgubljeni.")
 
-    def dodaj_urlje(self, datoteka):
+    def uvozi(self, datoteka):
         '''
         V bazo seje doda pesmi iz datoteke z urlji, ločeni z novimi vrsticami.
         '''
@@ -113,15 +120,25 @@ class Seja:
         Uporabi modul *, in vrne prvih pi rezultatov iskanja v tabeli razredov.
         '''
         print("beta verzija")
-        #tabela z rezultati
-        rezultati = json.loads(searchYoutube(geslo, 1, "json").result())["search_result"]
-        # standrdiziranje imen. TODO ? svoja verzija modula za rezultate?
-        for i in rezultati:
-            i['url'] = i.pop('link')
-            i['naslov'] = i.pop('title')
-            i['avtor'] = i.pop('channel')
-            i['dolzina'] = i.pop('duration')
-            if dodaj_v_bazo:
-                self.dodaj_url(i['url'])
-        return rezultati
+        try:
+            #tabela z rezultati
+            rezultati = json.loads(searchYoutube(geslo, 1, "json").result())["search_result"]
+            # standrdiziranje imen. TODO ? svoja verzija modula za rezultate?
+            for i in rezultati:
+                i['url'] = i.pop('link')
+                i['naslov'] = i.pop('title')
+                i['avtor'] = i.pop('channel')
+                i['dolzina'] = i.pop('duration')
+                if dodaj_v_bazo:
+                    self.dodaj_url(i['url'])
+            return rezultati
+        except:
+            print("napaka med klicom na pesem")
 
+    def izvozi(self, datoteka='knjiznica.txt'):
+        '''
+        V datoteko izvozi spletne naslove pesmi v bazi, ločene z novo vrstico.
+        '''
+        with open(datoteka, 'a') as txt:
+            for i in self.baza:
+                txt.write(i['url'])

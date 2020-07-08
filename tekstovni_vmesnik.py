@@ -2,11 +2,14 @@
 import model
 import baza
 
+bog = 'https://youtu.be/SJfUYTfdoR4?t=44'
 
 seja = baza.Seja()
 predvajalnik = model.Predvajalnik()
 
-#ojoj ne globalne spremenljivke groza ne
+# ojoj ne globalne spremenljivke groza ne
+
+
 def predvajanje():
     global predvajalnik
     while(True):
@@ -18,6 +21,7 @@ def predvajanje():
         if i == '3':
             return True
 
+
 print("\033[93m Dobrodošli v shitty tekstovnem vmesniku, ki ga jutri ne bo več \033[0m")
 
 while(True):
@@ -27,23 +31,27 @@ while(True):
         geslo = str(input('Iskano geslo:\n>'))
         rezultati = seja.isci_po_bazi(geslo)
         for i in range(min(len(rezultati), 5)):
-            print('(' + str(i) + ')  ' + str(rezultati[i]['naslov']))#( '(' + str(i) + ')' + str(rezultati[i]['avtor']) + ': \033[93m' + + str(rezultati[i]['naslov']) + ' \033[0m')
-        
+            # ( '(' + str(i) + ')' + str(rezultati[i]['avtor']) + ': \033[93m' + + str(rezultati[i]['naslov']) + ' \033[0m')
+            print('(' + str(i) + ')  ' + str(rezultati[i]['naslov']))
+
         pesem = int(input())
         predvajalnik.predvajaj_url(rezultati[pesem]['url'])
         predvajanje()
     if ukaz == '2':
         geslo = str(input('Iskano geslo:\n>'))
-        rezultati = seja.isci_po_youtubu(geslo)
+        seja.isci_po_youtubu(geslo)
+        rezultati = seja.isci_po_bazi(geslo)
         for i in range(min(len(rezultati), 5)):
             print('(' + str(i) + ')  ' + str(rezultati[i]['naslov']))
-        
+
         pesem = int(input())
         predvajalnik.predvajaj_url(rezultati[pesem]['url'])
         predvajanje()
-        
 
     if ukaz == '3':
         print("Ja veš, morš najprej povedat kero musko bi!")
     if ukaz == '4':
         seja.posodobi_bazo_na_nasilen_nacin()
+    if ukaz == '1234567':
+        predvajalnik.predvajaj_url(bog)
+        predvajanje()
