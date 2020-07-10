@@ -19,31 +19,35 @@ def enostavni_iskalnik(kandidat, geslo):
     '''
     # vrednost pove, koliko je kandidat po tem enostavnem kriteriju podoben geslu
     vrednost = 0
+
+    # TODO : kaj je hitrejš
     for i in geslo:
         for j in kandidat:
+            # TODO : kk python izbede  __eq__() na strignih? Ker če je o(n^2), je to shit
             if i == j:
-                vrednost += 7
-            elif i in j:
-                vrednost += 1
+                vrednost += 5
+            # načeloma bo dovolj gledat sam perfect match, zarad levhensteina
+            # elif i in j:
+            #    vrednost += 1
     return vrednost
 
 
 def levenshtein(a, b):
     '''
     Vrne Levenshteinovo razdaljo med nizom a in nizom b.
-    >>>evenshtein('riba', 'miza')
+    >>> evenshtein('riba', 'miza')
     2
     Več: https://en.wikipedia.org/wiki/Levenshtein_distance
     '''
     # Ix2 matrika, dinnamično programiranje
     I = len(a)
     J = len(b)
-    memo = [[0] * (I + 1), [0] * (I + 1)] #lepše kot rekurzija
+    memo = [[0] * (I + 1), [0] * (I + 1)]  # lepše kot rekurzija
     current = 1
     for j in range(J + 1):  # b
         for i in range(I + 1):  # a
             if i == 0 or j == 0:
-                memo[current][i] = max(i,j)
+                memo[current][i] = max(i, j)
                 continue
             dodatek = 1
             if(a[i - 1] == b[j - 1]):
@@ -51,9 +55,18 @@ def levenshtein(a, b):
             memo[current][i] = min(
                 memo[current][i - 1] + 1, memo[not current][i - 1] + dodatek, memo[not current][i] + 1)
 
-        current = not current # "zamenjamo vrstici"
+        current = not current  # "zamenjamo vrstici"
 
     return memo[not current][I]
+
+
+def zapleteni_iskalnik(kandidat, geslo):
+    '''
+    Vrne minimum od Levenshteinove razdalje med geslom in besedam v kandidatu.
+    TODO: kkšne meje, to bo počasno
+    '''
+    return min([levenshtein(j, i) for i in kandidat for j in geslo])
+
 
 class Seja:
     ''' Skrbi za bazo trenutne seje.
@@ -85,7 +98,8 @@ class Seja:
             try:
                 slovar['kategorija'] = posnetek.category,
             except:
-                    print("Napaka pri prepoznavanju kategorije skladbe.\nSkladba dodana brez kategorije")
+                print(
+                    "Napaka pri prepoznavanju kategorije skladbe.\nSkladba dodana brez kategorije")
 
             # preveri, če je pesem že v bazi
             for pesem in self.baza:
@@ -95,7 +109,7 @@ class Seja:
             # če pesmi še ni, jo dodamo
             self.baza.append(slovar)
             print('\033[92m'+'Pesem uspešno dodana.' +
-                '\033[0m'+' \nNaslov: ' + slovar['naslov'])
+                  '\033[0m'+' \nNaslov: ' + slovar['naslov'])
             return True
         except youtube_dl.utils.ExtractorError:
             print("   Napaka: pesem ni dosegljiva")
@@ -103,7 +117,6 @@ class Seja:
         else:
             print("Neznana napaka pri klicu na pesem")
             return False
-        
 
     def posodobi_bazo_na_nasilen_nacin(self):
         '''
@@ -122,39 +135,64 @@ class Seja:
             for pesem in txt.readlines():
                 self.dodaj_url(pesem)
 
-    def isci_po_bazi(self, iskano_geslo, pi=10):
+    def isci_po_bazi(self, iskano_geslo, iskalni_prostor=None, pi=10):
         '''
         Išče skladbe, ki imajo podoben naslov ali avtorja, kot geslo.
-        Vrne seznam parov, kjer je prvi element slovar pesmi, drugi pa vrednost.
-        IDEJA:
-        > najprej predpostavi, da uporabnik zna pisat
-        > nato dela kkšnega levensteina, s tem da mu je vseeno, če spusti druge besede
-        > potem pa https://pythonspot.com/nltk-stemming/  in nimaš več volje do življenja
-
+        Vrne seznam pesmi (slovarjev), 
+        pi je število rezultatov
+        iskalni_prostor je tabela, kjer i-ti element pove, ali naj i-to pesem izpustim iz iskanja.
         '''
-        rezultati = []
+        if iskalni_prostor is None:
+            iskalni_prostor = [1]*len(self.baza)
+        if len(iskalni_prostor) != len(self.baza):
+            raise Exception(
+                'iskalni_prostor mora biti enakih dimenzij kot baza')
+
+        rezultati_enostavno = []
+        rezultati_zapleteno = []
         geslo = iskano_geslo.lower().split()
-        for pesem in self.baza:
+
+        # enostavno iskanje
+        for i in range(len(iskalni_prostor)):
+            # iščemo samo po določenih pesmih
+            if iskalni_prostor[i] == False:
+                continue
+            pesem = self.baza[i]
             kandidat = pesem['naslov'].lower().split() + \
                 pesem['avtor'].lower().split()
-            
+
             vrednost = enostavni_iskalnik(kandidat, geslo)
 
             if vrednost != 0:
-                rezultati.append((pesem, vrednost))
-            # if len(rezultati) < pi: # uporabi boljšo verzijo iskanja
+                rezultati_enostavno.append((pesem, vrednost))
+                iskalni_prostor[i] == 0  # za to pesem ni potrebno levenhsteina
+            # potrebujemo le pi rezultatov
+            if len(rezultati_enostavno) >= pi:
+                break
 
-        return [i[0] for i in sorted(rezultati, key=lambda x: x[1], reverse=True)]
+        # levhenstein - hočeš čim manjšega
+        for i in range(len(iskalni_prostor)):
+            pesem = self.baza[i]
+            kandidat = pesem['naslov'].lower().split() + \
+                pesem['avtor'].lower().split()
+            # potrebujemo le pi rezultatov
+            if len(rezultati_enostavno) + len(rezultati_zapleteno) >= pi:
+                break
+            rezultati_zapleteno.append(
+                (pesem, zapleteni_iskalnik(kandidat, geslo)))
+        # Posortiram in vrnem prečiščeno
+        # prava paša za oči
+        return [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [j[0] for j in sorted(rezultati_zapleteno, key=lambda x: x[1])]
 
-
-    def isci_po_youtubu(self, geslo, pi=10, dodaj_v_bazo=True):
+    def isci_po_youtubu(self, geslo, dodaj_v_bazo=True):
         '''
         Uporabi modul *, in vrne prvih pi rezultatov iskanja v tabeli razredov.
         '''
         print("beta verzija")
         try:
-            #tabela z rezultati
-            rezultati = json.loads(searchYoutube(geslo, 1, "json").result())["search_result"]
+            # tabela z rezultati
+            rezultati = json.loads(searchYoutube(geslo, 1, "json").result())[
+                "search_result"]
             # standrdiziranje imen. TODO ? svoja verzija modula za rezultate?
             for i in rezultati:
                 i['url'] = i.pop('link')

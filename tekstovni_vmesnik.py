@@ -31,7 +31,6 @@ while(True):
         geslo = str(input('Iskano geslo:\n>'))
         rezultati = seja.isci_po_bazi(geslo)
         for i in range(min(len(rezultati), 5)):
-            # ( '(' + str(i) + ')' + str(rezultati[i]['avtor']) + ': \033[93m' + + str(rezultati[i]['naslov']) + ' \033[0m')
             print('(' + str(i) + ')  ' + str(rezultati[i]['naslov']))
 
         pesem = int(input())
