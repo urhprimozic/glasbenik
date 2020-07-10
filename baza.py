@@ -27,7 +27,33 @@ def enostavni_iskalnik(kandidat, geslo):
                 vrednost += 1
     return vrednost
 
-def leib
+
+def levenshtein(a, b):
+    '''
+    Vrne Levenshteinovo razdaljo med nizom a in nizom b.
+    >>>evenshtein('riba', 'miza')
+    2
+    Več: https://en.wikipedia.org/wiki/Levenshtein_distance
+    '''
+    # Ix2 matrika, dinnamično programiranje
+    I = len(a)
+    J = len(b)
+    memo = [[0] * (I + 1), [0] * (I + 1)] #lepše kot rekurzija
+    current = 1
+    for j in range(J + 1):  # b
+        for i in range(I + 1):  # a
+            if i == 0 or j == 0:
+                memo[current][i] = max(i,j)
+                continue
+            dodatek = 1
+            if(a[i - 1] == b[j - 1]):
+                dodatek = 0
+            memo[current][i] = min(
+                memo[current][i - 1] + 1, memo[not current][i - 1] + dodatek, memo[not current][i] + 1)
+
+        current = not current # "zamenjamo vrstici"
+
+    return memo[not current][I]
 
 class Seja:
     ''' Skrbi za bazo trenutne seje.
