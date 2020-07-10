@@ -81,6 +81,12 @@ class Seja:
                 'dolzina': posnetek.duration,
                 'naslov': posnetek.title,
             }
+            # google ne mara preveč requestov po kategoriji
+            try:
+                slovar['kategorija'] = posnetek.category,
+            except:
+                    print("Napaka pri prepoznavanju kategorije skladbe.\nSkladba dodana brez kategorije")
+
             # preveri, če je pesem že v bazi
             for pesem in self.baza:
                 if pesem['url'] == url:
