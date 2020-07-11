@@ -8,7 +8,7 @@ from youtubesearchpython import searchYoutube
 > enostavni iskalnik je počasen. Če je blo do sedaj dovolj gesel ničelnih, itak veš, da pesmi ne bo noter
 '''
 
-
+# TODO : a je bolš da premakneš to v bazo in rečeš @staticmethod ?
 def enostavni_iskalnik(kandidat, geslo):
     '''
     Pogleda, koliko besed iz gelsa se skriva v kandidatu. 
@@ -30,7 +30,6 @@ def enostavni_iskalnik(kandidat, geslo):
             # elif i in j:
             #    vrednost += 1
     return vrednost
-
 
 def levenshtein(a, b):
     '''
@@ -59,14 +58,12 @@ def levenshtein(a, b):
 
     return memo[not current][I]
 
-
 def zapleteni_iskalnik(kandidat, geslo):
     '''
     Vrne minimum od Levenshteinove razdalje med geslom in besedam v kandidatu.
     TODO: kkšne meje, to bo počasno
     '''
     return min([levenshtein(j, i) for i in kandidat for j in geslo])
-
 
 class Seja:
     ''' Skrbi za bazo trenutne seje.
