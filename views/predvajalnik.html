@@ -1,7 +1,11 @@
 % rebase('osnova.html')
 <div class="orodna_vrstica">
-    <a class="active" href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    <input type="text" placeholder="Išči po bazi...">
+    <a class="active" href="#home">Meni</a>
+    <div class="iskalnik">
+        <form action="/action_page.php">
+          <input type="text" placeholder="Išči po bazi.." name="search">
+          <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+      </div>
+    <a href="#contact">Prijava</a>
 </div>
