@@ -1,11 +1,19 @@
 % rebase('osnova.html')
+<!-- Orodna vrstica  -->
 <div class="orodna_vrstica">
     <a class="active" href="#home">Meni</a>
     <div class="iskalnik">
-        <form action="/action_page.php">
-          <input type="text" placeholder="Išči po bazi.." name="search">
+        <form action="/isci_po_bazi/">
+          <input type="text" placeholder="Išči po bazi.." name="iskalno_okno">
           <button type="submit"><i class="fa fa-search"></i></button>
         </form>
       </div>
     <a href="#contact">Prijava</a>
 </div>
+<!-- rezultati iskanja-->
+% if rezultati is not None:
+    % for i in rezultati:
+        <br>
+        {{i['naslov']}}  
+    % end
+% end

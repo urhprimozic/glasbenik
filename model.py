@@ -27,7 +27,7 @@ class Predvajalnik:
         Preveri internetno povezavo, preveri url
         '''
         # pafy poišče najbolšo kvaliteto za prenos v živo
-        kvaliteten_url = pafy.new(url).getbest().url
+        kvaliteten_url = pafy.new(url).getbestaudio().url
 
         # vlc magija
         media = self.vlc_instance.media_new(kvaliteten_url)
