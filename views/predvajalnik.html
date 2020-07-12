@@ -3,17 +3,45 @@
 <div class="orodna_vrstica">
     <a class="active" href="#home">Meni</a>
     <div class="iskalnik">
-        <form action="/isci_po_bazi/">
+        <form action="/">
           <input type="text" placeholder="Išči po bazi.." name="iskalno_okno">
           <button type="submit"><i class="fa fa-search"></i></button>
         </form>
       </div>
     <a href="#contact">Prijava</a>
 </div>
+
+<br>
+
 <!-- rezultati iskanja-->
 % if rezultati is not None:
-    % for i in rezultati:
-        <br>
-        {{i['naslov']}}  
-    % end
+  <!--  <div class="rezultat">-->
+        <table class="tabela">
+            <tr id="trnaslovna">
+                <th style="text-align: left;">NASLOV</th>
+                <th><i class="fa fa-clock-o" aria-hidden="true"></i></th>
+                <th  style="text-align: right;">AVTOR</th>
+            </tr>
+        
+        % for i in range(len(rezultati)):
+            
+            % if i == len(rezultati) - 1:
+                <tr>
+                    <td id="last_td" style="text-align: left;">{{rezultati[i]['naslov']}}</td>
+                    <td id="last_td" style="text-align: center;">{{rezultati[i]['dolzina']}}</td>
+                    <td id="last_td"  style="text-align: right;">{{rezultati[i]['avtor']}}</td>
+                
+                </tr>
+            %else:
+            <tr>
+                <td style="text-align: left;"><a style="display:block;" href="/#{{rezultati[i]['url']}}">{{rezultati[i]['naslov']}}</a></td>
+                <td  style="text-align: center;">{{rezultati[i]['dolzina']}}</td>
+                <td style="text-align: right;">{{rezultati[i]['avtor']}}</td>
+            
+            </tr>
+            %end
+        
+        % end
+        </table>
+   <!--  </div>-->
 % end

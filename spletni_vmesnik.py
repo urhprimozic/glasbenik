@@ -1,9 +1,10 @@
 import bottle
 import baza
-
+import model
 # BAZA
 seja = baza.Seja()
-
+#VLC PREDVAJALNIk
+vlc = model.Predvajalnik()
 
 # styles
 @bottle.route('/static/<filename>', name='static')
@@ -18,7 +19,12 @@ def server_static(filename):
 
 @bottle.get('/')
 def index():
-    return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=None)
+    #return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=None)
+    geslo = bottle.request.query.getunicode('iskalno_okno')
+    if geslo is None:
+        return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=None)
+    rezultati = seja.isci_po_bazi(geslo)
+    return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=rezultati)
 
 # iskanje
 
@@ -30,11 +36,11 @@ def index():
 #     bottle.redirect('/isci_po_bazi/')
 
 
-@bottle.get('/isci_po_bazi/')
-def index():
-    geslo = bottle.request.query.getunicode('iskalno_okno')
-    rezultati = seja.isci_po_bazi(geslo)
-    return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=rezultati)
+# @bottle.get('/isci_po_bazi/')
+# def index():
+#     geslo = bottle.request.query.getunicode('iskalno_okno')
+#     rezultati = seja.isci_po_bazi(geslo)
+#     return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=rezultati)
 
 
 # konec

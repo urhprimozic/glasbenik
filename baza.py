@@ -91,6 +91,12 @@ class Seja:
                 'dolzina': posnetek.duration,
                 'naslov': posnetek.title,
             }
+            #thumbnail
+            try:
+                slovar['slika'] = posnetek.bigthumb
+            except:
+                print("Slika ni dostopna")
+                slovar['slika'] = '/media/default.png'
             # google ne mara preveč requestov po kategoriji
             try:
                 slovar['kategorija'] = posnetek.category,
