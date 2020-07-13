@@ -3,18 +3,23 @@
 <div class="orodna_vrstica">
     <a class="active" href="#home">Meni</a>
     <div class="iskalnik">
-        <form action="/">
+        <form action="/isci/" method="GET">
+            <!--Razlaga grde kode okoli forme backend 
+
+
+            -->
           <input type="text" placeholder="Išči po bazi.." name="iskalno_okno">
           <button type="submit"><i class="fa fa-search"></i></button>
         </form>
       </div>
     <a href="#contact">Prijava</a>
 </div>
+<form action="/predvajaj/" method="POST" id="predvajaj_skladbo"></form>
 
 <br>
 
 <!-- rezultati iskanja-->
-% if rezultati is not None:
+% if rezultati is not None and rezultati != []:
   <!--  <div class="rezultat">-->
         <table class="tabela">
             <tr id="trnaslovna">
@@ -27,14 +32,19 @@
             
             % if i == len(rezultati) - 1:
                 <tr>
-                    <td id="last_td" style="text-align: left;">{{rezultati[i]['naslov']}}</td>
+                    <td id="last_td" style="text-align: left;">
+                        <input type="image" class="thumbnail" form="predvajaj_skladbo" src="{{rezultati[i]['slika']}}" name="{{i}}" width="50" height="50"> 
+                        {{rezultati[i]['naslov']}}</td>
                     <td id="last_td" style="text-align: center;">{{rezultati[i]['dolzina']}}</td>
                     <td id="last_td"  style="text-align: right;">{{rezultati[i]['avtor']}}</td>
                 
                 </tr>
             %else:
             <tr>
-                <td style="text-align: left;"><a style="display:block;" href="/#{{rezultati[i]['url']}}">{{rezultati[i]['naslov']}}</a></td>
+                <td style="text-align: left;"> 
+                    <input type="image" class="thumbnail" form="predvajaj_skladbo" src="{{rezultati[i]['slika']}}" name="{{i}}" width="50" height="50"> 
+                    {{rezultati[i]['naslov']}}
+                </td>
                 <td  style="text-align: center;">{{rezultati[i]['dolzina']}}</td>
                 <td style="text-align: right;">{{rezultati[i]['avtor']}}</td>
             
@@ -44,4 +54,6 @@
         % end
         </table>
    <!--  </div>-->
+%else:
+Poiščite po bazi.
 % end

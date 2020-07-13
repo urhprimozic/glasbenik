@@ -76,6 +76,7 @@ class Seja:
         self.lokacija_lokalne_baze = lokacija
         with open(lokacija, 'r') as lokalna_baza:
             self.baza = json.load(lokalna_baza)
+        self.zadnji_rezultati = []
 
     def dodaj_url(self, url):
         '''Doda pesem, ki se nahaja na spletnem naslovu url, v bazo seje, če je tam še ni.
@@ -185,7 +186,8 @@ class Seja:
                 (pesem, zapleteni_iskalnik(kandidat, geslo)))
         # Posortiram in vrnem prečiščeno
         # prava paša za oči
-        return [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [j[0] for j in sorted(rezultati_zapleteno, key=lambda x: x[1])]
+        self.zadnji_rezultati = [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [j[0] for j in sorted(rezultati_zapleteno, key=lambda x: x[1])]
+        return self.zadnji_rezultati
 
     def isci_po_youtubu(self, geslo, dodaj_v_bazo=True):
         '''
@@ -215,3 +217,17 @@ class Seja:
         with open(datoteka, 'a') as txt:
             for i in self.baza:
                 txt.write(i['url'])
+
+# s = Seja()
+# for pesem in s.baza:
+#     try:
+#         p = pafy.new(pesem['url'])
+#     except:
+#         pesem['slika'] = '/media/default.png'
+#         continue
+#     try:
+#         pesem['slika'] = p.bigthumb
+#     except:
+#         print("Slika ni dostopna")
+#         pesem['slika'] = '/media/default.png'
+# s.posodobi_bazo_na_nasilen_nacin()
