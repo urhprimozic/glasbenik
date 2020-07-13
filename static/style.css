@@ -4,6 +4,26 @@ body{
     font-family: 'Raleway', sans-serif;
     background-color: #f6f6f6;
 }
+h1{
+    font-family: "Roboto";
+    font-size: 40px;
+    color: #244044;
+}
+.gumb {
+    background-color: #f6f6f6;
+    border: 3px solid #ffcc33;
+   /* color: white;*/
+    color: #000000;
+    padding: 12px;
+    margin: 15px;
+    border-radius: 2px;
+    font-family: 'Roboto';
+    font-size: 15px;
+    
+}
+.gumb:hover {
+    background-color: #e9e9e9;
+}
 .thumbnail {
         border-radius: 50%;
 }
@@ -37,7 +57,8 @@ body{
     color: black;
 }
 #trnaslovna{
-    font-family: 'Roboto';font-size: 15px;
+    font-family: 'Roboto';
+    font-size: 15px;
 }
 #trnaslovna:hover{
     background-color: rgb(255, 255, 255);
@@ -74,13 +95,16 @@ body{
 }
 
 .orodna_vrstica a:hover {
-  background-color: #ddd;
+  background-color: #e9e9e9;
   color: black;
 }
 .orodna_vrstica a.active {
   background-color: #ffcc33;
-  color: white;
+  color: #244044;
 }
+.orodna_vrstica a.active:hover {
+    background-color: #a38321;
+  }
 /* iskalnik*/
 .orodna_vrstica .iskalnik {
    /* display: inline-block;*/
@@ -103,7 +127,14 @@ body{
     background: #c3a13c;
 }
 
-
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
 
 
 /* Za majhne zaslove*/

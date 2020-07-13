@@ -1,26 +1,12 @@
 % rebase('osnova.html')
-<!-- Orodna vrstica  -->
-<div class="orodna_vrstica">
-    <a class="active" href="#home">Meni</a>
-    <div class="iskalnik">
-        <form action="/isci/" method="GET">
-            <!--Razlaga grde kode okoli forme backend 
 
-
-            -->
-          <input type="text" placeholder="Išči po bazi.." name="iskalno_okno">
-          <button type="submit"><i class="fa fa-search"></i></button>
-        </form>
-      </div>
-    <a href="#contact">Prijava</a>
-</div>
 <form action="/predvajaj/" method="POST" id="predvajaj_skladbo"></form>
 
 <br>
 
 <!-- rezultati iskanja-->
 % if rezultati is not None and rezultati != []:
-  <!--  <div class="rezultat">-->
+<div>
         <table class="tabela">
             <tr id="trnaslovna">
                 <th style="text-align: left;">NASLOV</th>
@@ -53,7 +39,21 @@
         
         % end
         </table>
-   <!--  </div>-->
+    </div>
+    <br>
+        <div style="margin-top: 15px;height: 30px;position: relative;padding-top: 15px;">
+            <div class="center">
+                <!-- Gumba-->
+                <form method="POST" action="/nalozi_vec_skladb/">
+                    <button class="gumb" name="nalozi_vec">NALOŽI VEČ</button>
+                    <button class="gumb" name="po_spletu">POIŠČI NA SPLETU</button>
+                </form>
+            </div>
+        </div>
+
+<br>
+<br>
+<br>        
 %else:
 Poiščite po bazi.
 % end

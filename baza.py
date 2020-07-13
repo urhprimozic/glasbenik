@@ -9,6 +9,8 @@ from youtubesearchpython import searchYoutube
 '''
 
 # TODO : a je bolš da premakneš to v bazo in rečeš @staticmethod ?
+
+
 def enostavni_iskalnik(kandidat, geslo):
     '''
     Pogleda, koliko besed iz gelsa se skriva v kandidatu. 
@@ -30,6 +32,7 @@ def enostavni_iskalnik(kandidat, geslo):
             # elif i in j:
             #    vrednost += 1
     return vrednost
+
 
 def levenshtein(a, b):
     '''
@@ -58,12 +61,14 @@ def levenshtein(a, b):
 
     return memo[not current][I]
 
+
 def zapleteni_iskalnik(kandidat, geslo):
     '''
     Vrne minimum od Levenshteinove razdalje med geslom in besedam v kandidatu.
     TODO: kkšne meje, to bo počasno
     '''
     return min([levenshtein(j, i) for i in kandidat for j in geslo])
+
 
 class Seja:
     ''' Skrbi za bazo trenutne seje.
@@ -76,7 +81,11 @@ class Seja:
         self.lokacija_lokalne_baze = lokacija
         with open(lokacija, 'r') as lokalna_baza:
             self.baza = json.load(lokalna_baza)
+        # zadnje zadeve. TODO zgodovina iskanja?
         self.zadnji_rezultati = []
+        self.zadnje_iskanje = []
+        self.zadnje_geslo = "klemen klemen"
+        self.zadnji_pi = 11
 
     def dodaj_url(self, url):
         '''Doda pesem, ki se nahaja na spletnem naslovu url, v bazo seje, če je tam še ni.
@@ -92,7 +101,7 @@ class Seja:
                 'dolzina': posnetek.duration,
                 'naslov': posnetek.title,
             }
-            #thumbnail
+            # thumbnail
             try:
                 slovar['slika'] = posnetek.bigthumb
             except:
@@ -139,18 +148,25 @@ class Seja:
             for pesem in txt.readlines():
                 self.dodaj_url(pesem)
 
-    def isci_po_bazi(self, iskano_geslo, iskalni_prostor=None, pi=10):
+    def isci_po_bazi(self, iskano_geslo=None, iskalni_prostor=None, pi=11):
+        print("Zacetek:", iskalni_prostor)
+        print(self.zadnje_iskanje)
         '''
         Išče skladbe, ki imajo podoben naslov ali avtorja, kot geslo.
         Vrne seznam pesmi (slovarjev), 
         pi je število rezultatov
         iskalni_prostor je tabela, kjer i-ti element pove, ali naj i-to pesem izpustim iz iskanja.
         '''
-        if iskalni_prostor is None:
+        self.zadnji_pi = pi
+        if iskano_geslo is None:
+            iskano_geslo = self.zadnje_geslo
+        else:
+            self.zadnje_geslo = iskano_geslo
+        vec_pesmi = True
+        if iskalni_prostor is None: #or len(iskalni_prostor) != len(self.baza):
             iskalni_prostor = [1]*len(self.baza)
-        if len(iskalni_prostor) != len(self.baza):
-            raise Exception(
-                'iskalni_prostor mora biti enakih dimenzij kot baza')
+            vec_pesmi = False
+
 
         rezultati_enostavno = []
         rezultati_zapleteno = []
@@ -169,13 +185,15 @@ class Seja:
 
             if vrednost != 0:
                 rezultati_enostavno.append((pesem, vrednost))
-                iskalni_prostor[i] == 0  # za to pesem ni potrebno levenhsteina
+                iskalni_prostor[i] = 0  # za to pesem ni potrebno levenhsteina
             # potrebujemo le pi rezultatov
             if len(rezultati_enostavno) >= pi:
                 break
 
         # levhenstein - hočeš čim manjšega
         for i in range(len(iskalni_prostor)):
+            if iskalni_prostor[i] == 0:
+                continue
             pesem = self.baza[i]
             kandidat = pesem['naslov'].lower().split() + \
                 pesem['avtor'].lower().split()
@@ -184,9 +202,19 @@ class Seja:
                 break
             rezultati_zapleteno.append(
                 (pesem, zapleteni_iskalnik(kandidat, geslo)))
+            iskalni_prostor[i] = 0
+
+        self.zadnje_iskanje = iskalni_prostor[:]
+        print("Konec:", iskalni_prostor)
+        print(self.zadnje_iskanje)
         # Posortiram in vrnem prečiščeno
         # prava paša za oči
-        self.zadnji_rezultati = [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [j[0] for j in sorted(rezultati_zapleteno, key=lambda x: x[1])]
+        if vec_pesmi:
+            self.zadnji_rezultati += [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [
+                j[0] for j in sorted(rezultati_zapleteno, key=lambda x: x[1])]
+        else:
+            self.zadnji_rezultati = [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [
+                j[0] for j in sorted(rezultati_zapleteno, key=lambda x: x[1])]
         return self.zadnji_rezultati
 
     def isci_po_youtubu(self, geslo, dodaj_v_bazo=True):

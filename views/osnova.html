@@ -15,6 +15,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+                <!-- Orodna vrstica  -->
+        <div class="orodna_vrstica">
+            <a class="active" href="/domov/"><b>Domov</b></a>
+            <a href="#home">Meni</a>
+            <a href="#contact">Prijava</a>
+            <div class="iskalnik">
+                <form action="/isci/" method="GET">
+                    <!--Razlaga grde kode okoli forme backend 
+
+
+                    -->
+                <input type="text" placeholder="Išči po bazi.." name="iskalno_okno">
+                <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+
         {{!base}}
     </body>
 </html>
