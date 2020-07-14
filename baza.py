@@ -185,6 +185,7 @@ class Seja:
 
             if vrednost != 0:
                 rezultati_enostavno.append((pesem, vrednost))
+                # print("aa")
                 iskalni_prostor[i] = 0  # za to pesem ni potrebno levenhsteina
             # potrebujemo le pi rezultatov
             if len(rezultati_enostavno) >= pi:
@@ -198,11 +199,16 @@ class Seja:
             kandidat = pesem['naslov'].lower().split() + \
                 pesem['avtor'].lower().split()
             # potrebujemo le pi rezultatov
-            if len(rezultati_enostavno) + len(rezultati_zapleteno) >= pi:
-                break
+           # if len(rezultati_enostavno) + len(rezultati_zapleteno) >= pi:
+            #    break
             rezultati_zapleteno.append(
-                (pesem, zapleteni_iskalnik(kandidat, geslo)))
-            iskalni_prostor[i] = 0
+                (pesem, zapleteni_iskalnik(kandidat, geslo), i))
+        #iskalni prostor
+        rezultati_zapleteno = sorted(rezultati_zapleteno, key=lambda x: x[1])[0:pi-len(rezultati_enostavno)]
+        for i in rezultati_zapleteno:
+            iskalni_prostor[i[2]] = 0
+        ans = [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [
+                j[0] for j in rezultati_zapleteno]
 
         self.zadnje_iskanje = iskalni_prostor[:]
         print("Konec:", iskalni_prostor)
@@ -210,11 +216,9 @@ class Seja:
         # Posortiram in vrnem prečiščeno
         # prava paša za oči
         if vec_pesmi:
-            self.zadnji_rezultati += [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [
-                j[0] for j in sorted(rezultati_zapleteno, key=lambda x: x[1])]
+            self.zadnji_rezultati += ans
         else:
-            self.zadnji_rezultati = [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [
-                j[0] for j in sorted(rezultati_zapleteno, key=lambda x: x[1])]
+            self.zadnji_rezultati = ans
         return self.zadnji_rezultati
 
     def isci_po_youtubu(self, geslo, dodaj_v_bazo=True):
