@@ -6,6 +6,13 @@ Glasbenik predvaja glasbo, ki jo najde na posnetkih [platforme youtube](https://
 Trenutno si lažem, da bo uporabniški vmesnik berljiv.
 
 ### Inštalacija
+Enostavno vse, kar potrebujete naložite z:
+```
+pip3 install youtube-search-python
+pip3 install pafy
+pip3 install python-vlc
+```   
+
 TODO: `setup.py` ali kaj podobnega, ki pripravi okolje.
 
 Sicer pa potrebuješ:
