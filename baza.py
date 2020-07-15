@@ -1,5 +1,6 @@
 # le zadeve, povezane z grajenjem in iskanjem po bazi
 import json
+import re
 import pafy
 import youtube_dl
 from youtubesearchpython import searchYoutube
@@ -24,14 +25,12 @@ def enostavni_iskalnik(kandidat, geslo):
 
     # TODO : kaj je hitrejš
     for i in geslo:
-        for j in kandidat:
-            # TODO : kk python izbede  __eq__() na strignih? Ker če je o(n^2), je to shit
-            if i == j:
-                vrednost += 5
-            # načeloma bo dovolj gledat sam perfect match, zarad levhensteina
-            # elif i in j:
-            #    vrednost += 1
-    return vrednost
+        if i in kandidat:
+            vrednost += 5
+        else:
+            vrednost -= 2
+
+    return max(0, vrednost)
 
 
 def levenshtein(a, b):
@@ -63,13 +62,24 @@ def levenshtein(a, b):
 
 
 def zapleteni_iskalnik(kandidat, geslo):
-    '''
-    Vrne minimum od Levenshteinove razdalje med geslom in besedam v kandidatu.
-    TODO: kkšne meje, to bo počasno
-    '''
-    return min([levenshtein(j, i) for i in kandidat for j in geslo])
+    vrednost = 0
+    for i in geslo:
+        vrednost += min([levenshtein(i, j) for j in kandidat])
+    return vrednost
+    # return min([levenshtein(j, i) for i in kandidat for j in geslo])
 
 
+def cistilec_nizov(niz):
+    '''
+    niz - str
+    Vzame niz in vrne tabelo besed, pisanih z malimi črkami iz niza. Vse znake, ki niso črke, vrže ven.
+    Simbola € in $ pusti, ker se večkrat pojavljata v glasbah,
+    Simbol & pa ne, saj je po navadi uporabljen brez sosednjih presledkov.
+    >>> cistilec_nizov("Elvis Jackson-Against The Gravity(Album)")
+    ['Elvis', 'Jackson', 'Against', 'The', 'Gravity', 'Album']
+    '''
+    # verjetno je regex hitrejši, pa rad bi se ga naučil uporabljat
+    return [i for i in re.sub("[^a-zA-ZčšžćđČŠŽĆĐß$€]+", " ", niz.lower()).split(" ") if i!='']
 class Seja:
     ''' Skrbi za bazo trenutne seje.
     self.baza je (pythonova) kopija lokalne baze.
@@ -163,14 +173,15 @@ class Seja:
         else:
             self.zadnje_geslo = iskano_geslo
         vec_pesmi = True
-        if iskalni_prostor is None: #or len(iskalni_prostor) != len(self.baza):
+        # or len(iskalni_prostor) != len(self.baza):
+        if iskalni_prostor is None:
             iskalni_prostor = [1]*len(self.baza)
             vec_pesmi = False
 
-
         rezultati_enostavno = []
         rezultati_zapleteno = []
-        geslo = iskano_geslo.lower().split()
+        # geslo = iskano_geslo.lower().split() outdated
+        geslo = cistilec_nizov(iskano_geslo)
 
         # enostavno iskanje
         for i in range(len(iskalni_prostor)):
@@ -178,8 +189,9 @@ class Seja:
             if iskalni_prostor[i] == False:
                 continue
             pesem = self.baza[i]
-            kandidat = pesem['naslov'].lower().split() + \
-                pesem['avtor'].lower().split()
+            kandidat = cistilec_nizov(pesem['naslov'] + ' ' + pesem['avtor'])
+            #kandidat = pesem['naslov'].lower().split() + \
+            #    pesem['avtor'].lower().split()
 
             vrednost = enostavni_iskalnik(kandidat, geslo)
 
@@ -196,19 +208,21 @@ class Seja:
             if iskalni_prostor[i] == 0:
                 continue
             pesem = self.baza[i]
-            kandidat = pesem['naslov'].lower().split() + \
-                pesem['avtor'].lower().split()
+            kandidat = cistilec_nizov(pesem['naslov'] + ' ' + pesem['avtor'])
+            #kandidat = pesem['naslov'].lower().split() + \
+              #  pesem['avtor'].lower().split()
             # potrebujemo le pi rezultatov
            # if len(rezultati_enostavno) + len(rezultati_zapleteno) >= pi:
             #    break
             rezultati_zapleteno.append(
                 (pesem, zapleteni_iskalnik(kandidat, geslo), i))
-        #iskalni prostor
-        rezultati_zapleteno = sorted(rezultati_zapleteno, key=lambda x: x[1])[0:pi-len(rezultati_enostavno)]
+        # iskalni prostor
+        rezultati_zapleteno = sorted(rezultati_zapleteno, key=lambda x: x[1])[
+            0:pi-len(rezultati_enostavno)]
         for i in rezultati_zapleteno:
             iskalni_prostor[i[2]] = 0
         ans = [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [
-                j[0] for j in rezultati_zapleteno]
+            j[0] for j in rezultati_zapleteno]
 
         self.zadnje_iskanje = iskalni_prostor[:]
         print("Konec:", iskalni_prostor)
