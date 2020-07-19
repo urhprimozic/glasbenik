@@ -27,8 +27,8 @@ def enostavni_iskalnik(kandidat, geslo):
     for i in geslo:
         if i in kandidat:
             vrednost += 5
-        else:
-            vrednost -= 2
+        # else:
+        #    vrednost -= 2
 
     return max(0, vrednost)
 
@@ -159,8 +159,6 @@ class Seja:
                 self.dodaj_url(pesem)
 
     def isci_po_bazi(self, iskano_geslo=None, iskalni_prostor=None, pi=11):
-        print("Zacetek:", iskalni_prostor)
-        print(self.zadnje_iskanje)
         '''
         Išče skladbe, ki imajo podoben naslov ali avtorja, kot geslo.
         Vrne seznam pesmi (slovarjev), 
@@ -175,7 +173,7 @@ class Seja:
         vec_pesmi = True
         # or len(iskalni_prostor) != len(self.baza):
         if iskalni_prostor is None:
-            iskalni_prostor = [1]*len(self.baza)
+            iskalni_prostor = [1] * len(self.baza)
             vec_pesmi = False
 
         rezultati_enostavno = []
@@ -199,9 +197,7 @@ class Seja:
                 rezultati_enostavno.append((pesem, vrednost))
                 # print("aa")
                 iskalni_prostor[i] = 0  # za to pesem ni potrebno levenhsteina
-            # potrebujemo le pi rezultatov
-            if len(rezultati_enostavno) >= pi:
-                break
+        rezultati_enostavno = sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)[0:min(pi, len(rezultati_enostavno))]
 
         # levhenstein - hočeš čim manjšega
         for i in range(len(iskalni_prostor)):
@@ -221,12 +217,14 @@ class Seja:
             0:pi-len(rezultati_enostavno)]
         for i in rezultati_zapleteno:
             iskalni_prostor[i[2]] = 0
-        ans = [i[0] for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)] + [
+        
+        # for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True):
+        #    print(i)
+
+        ans = [i[0] for i in rezultati_enostavno] + [
             j[0] for j in rezultati_zapleteno]
 
         self.zadnje_iskanje = iskalni_prostor[:]
-        print("Konec:", iskalni_prostor)
-        print(self.zadnje_iskanje)
         # Posortiram in vrnem prečiščeno
         # prava paša za oči
         if vec_pesmi:
