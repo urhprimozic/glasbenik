@@ -42,3 +42,13 @@ class Predvajalnik:
 
     def predvajaj(self):
         self.vlc_predvajalnik.play()
+    
+    def nalozi(self, url, mesto='skladbe/'):
+        '''
+        Naloži glasbo iz url-ja.
+        '''
+        try:
+            skladba = pafy.new(url).getbestaudio()
+            return skladba.download(filepath=mesto)
+        except:
+            return False

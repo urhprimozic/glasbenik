@@ -30,9 +30,17 @@ def isci_get():
     rezultati = seja.isci_po_bazi(geslo, pi=11)
     return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=rezultati)
 
+@bottle.post('/nalozi/')
+def nalozi_post():
+    index_skladbe = int(list(bottle.request.forms.keys())[0])
+    vlc.nalozi(seja.zadnji_rezultati[index_skladbe]['url'])
+    bottle.redirect('/')
+
+
 @bottle.post('/predvajaj/')
 def predvajaj_get():
     index_skladbe = int(list(bottle.request.forms.keys())[0].split('.')[0])
+    # print(seja.zadnji_rezultati)
     vlc.predvajaj_url(seja.zadnji_rezultati[index_skladbe]['url'])
     bottle.redirect('/')
 
