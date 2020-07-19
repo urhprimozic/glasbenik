@@ -1,14 +1,7 @@
-
-function loading_dots(){
-    var dots = window.setInterval( function() {
-        var wait = document.getElementById("wait");
-        if ( wait.innerHTML.length > 3 ) 
-            wait.innerHTML = "";
-        else 
-            wait.innerHTML += ".";
-        }, 100);
-    }
-
+function playButton(x, a){
+    if(a == 1) x.style.filter = "invert(81%) sepia(83%) saturate(1373%) hue-rotate(326deg) brightness(100%) contrast(103%)";
+    else x.style.filter = "none";
+}
 function showPage() {
     document.getElementById("loader").style.display = "none";
     }

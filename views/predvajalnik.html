@@ -12,6 +12,8 @@
 <div>
         <table class="tabela">
             <tr id="trnaslovna">
+                <th><i class="fa fa-play" aria-hidden="true"></i>
+                </th>
                 <th style="text-align: left;">NASLOV</th>
                 <th><i class="fa fa-clock-o" aria-hidden="true"></i></th>
                 <th  style="text-align: right;">AVTOR</th>
@@ -22,12 +24,11 @@
             
   
             <tr>
-                % if i == len(rezultati) - 1:
-                    <td id="last_td" style="text-align: left;">
-                % else:
-                    <td style="text-align: left;">
-                % end
-                    <input onclick="loader()" type="image" class="thumbnail" form="predvajaj_skladbo" src="{{rezultati[i]['slika']}}" name="{{i}}" width="50" height="50"> 
+                   
+                <td>
+                    <input id="thumb" onmouseover="playButton(this, 1)" onmouseout="playButton(this, 0)" onclick="loader()" type="image" class="thumbnail" form="predvajaj_skladbo" src="{{rezultati[i]['slika']}}" name="{{i}}" width="50" height="50" > 
+                </td>
+                <td style="text-align: left;">
                     {{rezultati[i]['naslov']}}
                 </td>
                 <td  style="text-align: center;">{{rezultati[i]['dolzina']}}</td>
