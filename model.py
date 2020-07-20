@@ -79,9 +79,14 @@ class Server:
         else:
             return max(self.seje.keys()) + 1
 
-    def nova_seja(self):
-        seja = baza.Seja()
+    def nova_seja(self, glavna_baza='baza.json'):
+        # vsak dobi SVOJO bazo
         id = self.prost_id_seje()
+        ime_baze = str(id) + '.json'
+        # če ime_baze obstaja, ga shutil NE ohrani
+        shutil.copyfile(glavna_baza, ime_baze)                    
+        seja = baza.Seja(lokacija=ime_baze)
         self.seje[id] = seja
+        print("Novi id", id)
         return id
 

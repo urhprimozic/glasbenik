@@ -15,10 +15,14 @@ def id():
     '''
     Vrne id uporabnikove seje, ali pa ustvari novo sejo in vrnje njen id.
     '''
-    ans = bottle.request.get_cookie('id_seje', secret=SKRIVNOST)
+    try:
+        ans = bottle.request.get_cookie('id_seje', secret=SKRIVNOST)
+    except:
+        ans = server.nova_seja()
+        bottle.response.set_cookie('id_seje', ans, secret=SKRIVNOST, path='/')
     if ans is None:
         ans = server.nova_seja()
-        bottle.response.set_cookie('id_seje', ans, secret=SKRIVNOST)
+        bottle.response.set_cookie('id_seje', ans, secret=SKRIVNOST, path='/')
     return ans
     
 
