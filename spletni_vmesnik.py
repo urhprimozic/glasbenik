@@ -2,6 +2,7 @@
 import bottle
 import baza
 import model
+import re
 # BAZA
 seja = baza.Seja()
 #VLC PREDVAJALNIk
@@ -15,15 +16,20 @@ def server_static(filename):
 @bottle.route('/media/<filename>')
 def server_static(filename):
     return bottle.static_file(filename, root='media')
+@bottle.route('/skladbe/<filename>')
+def server_static(filename):
+    return bottle.static_file(filename, root='skladbe')
 
 # vlc + bottle je slaba rešitev, javascript bi bla boljša
 
 @bottle.get('/')
 def index():
+    # model.izprazni_mapo('skladbe/') # TODO le, ko zaženeš nov session ?
     return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=seja.zadnji_rezultati)
 
 @bottle.get('/isci/')
 def isci_get():
+    model.izprazni_mapo('skladbe/') # TODO le, ko zaženeš nov session ?
     geslo = bottle.request.query.getunicode('iskalno_okno')
     if geslo is None or geslo == '':
         return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=None)
@@ -32,16 +38,22 @@ def isci_get():
 
 @bottle.post('/nalozi/')
 def nalozi_post():
+    '''
+    Naloži pesem na server in uporabnika pošlje na datoteko, da si jo ta lahko naloži
+    '''
     index_skladbe = int(list(bottle.request.forms.keys())[0])
-    vlc.nalozi(seja.zadnji_rezultati[index_skladbe]['url'])
-    bottle.redirect('/')
+    ime_datoteke = re.sub('[^a-zA-ZčšžćđČŠŽĆĐß$€]+', '-', seja.zadnji_rezultati[index_skladbe]['naslov'])
+    vlc.nalozi(seja.zadnji_rezultati[index_skladbe]['url'], ime_datoteke)
+    bottle.redirect('/skladbe/' + ime_datoteke + '.mp3')
+
+
 
 
 @bottle.post('/predvajaj/')
 def predvajaj_get():
     index_skladbe = int(list(bottle.request.forms.keys())[0].split('.')[0])
     # print(seja.zadnji_rezultati)
-    vlc.predvajaj_url(seja.zadnji_rezultati[index_skladbe]['url'])
+    vlc.predvajaj_url(seja.zadnji_rezultati[index_skladbe]['url']) 
     bottle.redirect('/')
 
 @bottle.get('/domov/')

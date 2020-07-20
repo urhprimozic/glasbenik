@@ -1,4 +1,5 @@
 % rebase('osnova.html')
+ %import re
 <div id="loader" style="display: none;"></div>
 
 
@@ -33,7 +34,8 @@
                 </td>
                 <td  style="text-align: center;">{{rezultati[i]['dolzina']}}</td>
                 <td style="text-align: right;">{{rezultati[i]['avtor']}}</td>
-                <td style="text-align: center;"><button name="{{i}}" onclick="loader()" class="download" form="nalozi_skladbo"><i class="fa fa-download" aria-hidden="true"></i></button>
+                <td style="text-align: center;">
+                        <button  name="{{i}}" onclick="loader()" class="download" form="nalozi_skladbo"><i class="fa fa-download" aria-hidden="true"></i></button>
                 </td>
             
             </tr>

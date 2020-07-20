@@ -3,8 +3,9 @@
 # slovenske spremenljivke
 import pafy
 import vlc
-
-
+import youtube_dl # pride že avtomatično s pafiyem
+import os
+import shutil
 class Predvajalnik:
     '''
     Poskrbi za magijo z moduloma vlc in pafy, da predvaja glasbo iz spletnega naslova.
@@ -43,12 +44,25 @@ class Predvajalnik:
     def predvajaj(self):
         self.vlc_predvajalnik.play()
     
-    def nalozi(self, url, mesto='skladbe/'):
+    def nalozi(self, url, ime_datoteke, mesto='skladbe/'):
         '''
-        Naloži glasbo iz url-ja.
+        Naloži glasbo iz url-ja v zapisu mp3.
         '''
         try:
-            skladba = pafy.new(url).getbestaudio()
-            return skladba.download(filepath=mesto)
+            # pafy nima možnosti za manualen filename        
+            ydl_opts = {'outtmpl': mesto + ime_datoteke + '.%(ext)s', 
+             'format': 'bestaudio/best',
+                 'postprocessors': [{
+                     'key': 'FFmpegExtractAudio',
+                     'preferredcodec': 'mp3',
+                     'preferredquality': '192',
+             }],
+    }
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                return ydl.download([url])
         except:
             return False
+
+def izprazni_mapo(rel):
+    shutil.rmtree(rel)
+    os.makedirs(rel) 

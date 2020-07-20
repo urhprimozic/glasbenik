@@ -11,7 +11,9 @@
 .download:hover{
     color: #ffcc33;
 }
-
+.download:active{
+    color: #54b754;
+}
 body{
     margin: 0;
     font-family: 'Raleway', sans-serif;
