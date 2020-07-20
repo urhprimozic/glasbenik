@@ -4,12 +4,25 @@ import baza
 import model
 import re
 # BAZA
-seja = baza.Seja()
+server = model.Server()
+# seja = baza.Seja()
 #VLC PREDVAJALNIk
 vlc = model.Predvajalnik()
 
+SKRIVNOST = "42x69eq420" # zastonj priložnost za jazjaz
 
-# styles
+def id():
+    '''
+    Vrne id uporabnikove seje, ali pa ustvari novo sejo in vrnje njen id.
+    '''
+    ans = bottle.request.get_cookie('id_seje', secret=SKRIVNOST)
+    if ans is None:
+        ans = server.nova_seja()
+        bottle.response.set_cookie('id_seje', ans, secret=SKRIVNOST)
+    return ans
+    
+
+# poti do map
 @bottle.route('/static/<filename>', name='static')
 def server_static(filename):
     return bottle.static_file(filename, root='static')
@@ -20,15 +33,21 @@ def server_static(filename):
 def server_static(filename):
     return bottle.static_file(filename, root='skladbe')
 
-# vlc + bottle je slaba rešitev, javascript bi bla boljša
+# vlc + bottle je ABSOLUTNO slaba rešitev (vlc je na serverju)
+# TODO: rešitev
+# > javascript (vse znova)
+# > embled audio in html + zapolneš se kje si ostal (počasno in nagaja)
+# > python plugin za uporabnika, ki predvaja musko
 
 @bottle.get('/')
 def index():
     # model.izprazni_mapo('skladbe/') # TODO le, ko zaženeš nov session ?
-    return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=seja.zadnji_rezultati)
+    seja = server.seje[id()]
+    return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=seja.rezultati())
 
 @bottle.get('/isci/')
 def isci_get():
+    seja = server.seje[id()]
     model.izprazni_mapo('skladbe/') # TODO le, ko zaženeš nov session ?
     geslo = bottle.request.query.getunicode('iskalno_okno')
     if geslo is None or geslo == '':
@@ -41,9 +60,10 @@ def nalozi_post():
     '''
     Naloži pesem na server in uporabnika pošlje na datoteko, da si jo ta lahko naloži
     '''
+    seja = server.seje[id()]
     index_skladbe = int(list(bottle.request.forms.keys())[0])
-    ime_datoteke = re.sub('[^a-zA-ZčšžćđČŠŽĆĐß$€]+', '-', seja.zadnji_rezultati[index_skladbe]['naslov'])
-    vlc.nalozi(seja.zadnji_rezultati[index_skladbe]['url'], ime_datoteke)
+    ime_datoteke = re.sub('[^a-zA-ZčšžćđČŠŽĆĐß$€]+', '-', seja.rezultati()[index_skladbe]['naslov'])
+    vlc.nalozi(seja.rezultati()[index_skladbe]['url'], ime_datoteke)
     bottle.redirect('/skladbe/' + ime_datoteke + '.mp3')
 
 
@@ -51,27 +71,33 @@ def nalozi_post():
 
 @bottle.post('/predvajaj/')
 def predvajaj_get():
+    seja = server.seje[id()]
     index_skladbe = int(list(bottle.request.forms.keys())[0].split('.')[0])
-    # print(seja.zadnji_rezultati)
-    vlc.predvajaj_url(seja.zadnji_rezultati[index_skladbe]['url']) 
+    # print(seja.rezultati())
+    try:
+        vlc.predvajaj_url(seja.rezultati()[index_skladbe]['url'])
+    except:
+        vlc.predvajaj_url('https://www.youtube.com/watch?v=hom9faSBUHQ') # bolana šala
     bottle.redirect('/')
 
 @bottle.get('/domov/')
 def domov_get():
+    seja = server.seje[id()]
     # TODO: posebna stran za domov - predlogi itd
     return bottle.template('domov.html',  get_url=bottle.url)
 
 @bottle.post('/nalozi_vec_skladb/')
 def nalozi_vec_post():
+    seja = server.seje[id()]
     # več iz baze
     if list(bottle.request.forms.keys())[0] == 'nalozi_vec':
-        seja.isci_po_bazi(seja.zadnje_geslo, iskalni_prostor=seja.zadnje_iskanje, pi=seja.zadnji_pi + 10)
+        seja.isci_po_bazi(seja.geslo(), iskalni_prostor=seja.iskanje(), pi=seja.pi() + 10)
     else:
-        seja.isci_po_youtubu(seja.zadnje_geslo)
+        seja.isci_po_youtubu(seja.geslo())
         # TODO: ne bit tko nasilen
         seja.posodobi_bazo_na_nasilen_nacin()
         # zdaj najprej zlovfdamo, nato pa iščemo  z našim algoritmom..
-        return bottle.template('predvajalnik.html',  get_url=bottle.url,  rezultati=seja.isci_po_bazi(seja.zadnje_geslo))
+        return bottle.template('predvajalnik.html',  get_url=bottle.url,  rezultati=seja.isci_po_bazi(seja.geslo()))
     bottle.redirect('/')
     
 

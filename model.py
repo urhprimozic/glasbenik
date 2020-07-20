@@ -6,6 +6,7 @@ import vlc
 import youtube_dl # pride že avtomatično s pafiyem
 import os
 import shutil
+import baza
 class Predvajalnik:
     '''
     Poskrbi za magijo z moduloma vlc in pafy, da predvaja glasbo iz spletnega naslova.
@@ -66,3 +67,21 @@ class Predvajalnik:
 def izprazni_mapo(rel):
     shutil.rmtree(rel)
     os.makedirs(rel) 
+
+class Server:
+    def __init__(self):
+        self.seje = {} #slovar
+    
+    # povzeto po vislicah.
+    def prost_id_seje(self):
+        if len(self.seje) == 0:
+            return 0
+        else:
+            return max(self.seje.keys()) + 1
+
+    def nova_seja(self):
+        seja = baza.Seja()
+        id = self.prost_id_seje()
+        self.seje[id] = seja
+        return id
+

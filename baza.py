@@ -96,6 +96,19 @@ class Seja:
         self.zadnje_iskanje = []
         self.zadnje_geslo = "klemen klemen"
         self.zadnji_pi = 11
+    
+    def rezultati(self):
+        return self.zadnji_rezultati
+    
+    def iskanje(self):
+        return self.zadnje_iskanje
+    
+    def geslo(self):
+        return self.zadnje_geslo
+    
+    def pi(self):
+        return self.zadnji_pi   
+    
 
     def dodaj_url(self, url):
         '''Doda pesem, ki se nahaja na spletnem naslovu url, v bazo seje, če je tam še ni.
