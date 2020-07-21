@@ -1,5 +1,21 @@
 **Vsa sumljiva koda v projektu je zgolj naključje. Ustvarjalec z vsem srcem spoštuje [vse svete knjige](https://developers.google.com/youtube/terms/api-services-terms-of-service)!**
 # Glasbenik – projekt pri predmetu UVP na FMF
+
+## Uporaba
+### Iskanje
+Iskalnik se nahaja v desnem zgornjem kotu. Če vam rezultati ne zadoščajo, jih lahko izpišete več (gumb **NALOŽI VEČ**) ali pa pobrskate po youtubu.
+
+![Iskanje pesmi *Chuck Berry*](https://github.com/urhprimozic/glasbenik/blob/master/README_data/iskanje.png)
+
+### Zgodovina predvajanja
+Na zavihtku **DOMOV** (zgoraj levo na orodni vrstici) se nam izriše zadnjih 50 skladb, ki smo jih poslušali. Seveda jih lahko tudi predvajamo.
+
+![Zgodovina predvajanih pesmi](https://github.com/urhprimozic/glasbenik/blob/master/README_data/zgodovina.png)
+
+.
+.
+.
+old readme:
 ### Rešitev za glasbene navdušence brez denarja.
 Glasbenik predvaja glasbo, ki jo najde na posnetkih [platforme youtube](https://www.youtube.com/). Predvaja samo glasbo, brez oglasov in filozofskih video vsebin. Prav tako gradi svojo bazo skladb in vam predlaga naslednji hit po njegovem izboru.
 
