@@ -8,6 +8,7 @@ from youtubesearchpython import searchYoutube
 >fajli z os (brezveze, dokler ne začnem delat z bottle, ker bom šel takrat delat s piškotki)
 > enostavni iskalnik je počasen. Če je blo do sedaj dovolj gesel ničelnih, itak veš, da pesmi ne bo noter
 '''
+velikost_zgodovine = 50
 
 # TODO : a je bolš da premakneš to v bazo in rečeš @staticmethod ?
 
@@ -79,7 +80,7 @@ def cistilec_nizov(niz):
     ['Elvis', 'Jackson', 'Against', 'The', 'Gravity', 'Album']
     '''
     # verjetno je regex hitrejši, pa rad bi se ga naučil uporabljat
-    return [i for i in re.sub("[^a-zA-ZčšžćđČŠŽĆĐß$€]+", " ", niz.lower()).split(" ") if i!='']
+    return [i for i in re.sub("[^a-zA-ZčšžćđČŠŽĆĐß$€0123456789]+", " ", niz.lower()).split(" ") if i!='']
 class Seja:
     ''' Skrbi za bazo trenutne seje.
     self.baza je (pythonova) kopija lokalne baze.
@@ -96,6 +97,34 @@ class Seja:
         self.zadnje_iskanje = []
         self.zadnje_geslo = "klemen klemen"
         self.zadnji_pi = 11
+        self.zgodovina = [1] # zgodovina[0] pove, kje je zadnji zapisani element
+    
+    def dodaj_v_zgodovino(self, pesem: dict):
+        if len(self.zgodovina) <= velikost_zgodovine:
+            self.zgodovina.append(pesem)
+            self.zgodovina[0] = len(self.zgodovina) -1
+        else:
+            if self.zgodovina[0] < len(self.zgodovina) - 1:
+                self.zgodovina[0] += 1
+            else: 
+                self.zgodovina[0] = 1
+            self.zgodovina[self.zgodovina[0]] = pesem
+
+                
+    
+    def zgodovina_predvajanih(self):
+        '''
+        Vrne seznam nazadnje predvajanih pesmi, kjer je prva pesem zadnja predvajana.
+        '''
+        j = self.zgodovina[0]
+        ans = []
+        for i in range(len(self.zgodovina) -1):
+            ans.append(self.zgodovina[j])
+            j -= 1
+            if j < 1:
+                j = len(self.zgodovina) -1
+        return ans
+
     
     def rezultati(self):
         return self.zadnji_rezultati
@@ -184,14 +213,12 @@ class Seja:
         else:
             self.zadnje_geslo = iskano_geslo
         vec_pesmi = True
-        # or len(iskalni_prostor) != len(self.baza):
         if iskalni_prostor is None:
             iskalni_prostor = [1] * len(self.baza)
             vec_pesmi = False
 
         rezultati_enostavno = []
         rezultati_zapleteno = []
-        # geslo = iskano_geslo.lower().split() outdated
         geslo = cistilec_nizov(iskano_geslo)
 
         # enostavno iskanje
