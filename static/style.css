@@ -1,8 +1,26 @@
 * {box-sizing: border-box;}
-
-/* Just common table stuff. Really. */
-/*table  { border-collapse: collapse; width: 100%; }*/
-
+.chungus{
+    display: block;
+    width: 130px;
+    height: 130px;
+    -webkit-transition: width 0.3s ease, height 0.3s ease;
+    -moz-transition: width 0.3s ease, height 0.3s ease;
+    -o-transition: width 0.3s ease, height 0.3s ease;
+    -ms-transition: width 0.3s ease, height 0.3s ease;
+    transition: width 0.3s ease, height 0.3s ease;
+}
+.chungus:hover{
+    width: 150px;
+    height: 150px;
+}
+.horizontalka{
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.horizontalka td {
+    padding-right: 10px;
+}
 .download{
     background-color: transparent;
     border: none;
@@ -21,8 +39,9 @@ body{
 }
 h1{
     font-family: "Roboto";
-    font-size: 40px;
+    font-size: 35px;
     color: #244044;
+    margin-bottom: 0;
 }
 .gumb {
     background-color: #f6f6f6;
@@ -252,5 +271,11 @@ https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_loader5
 	#ff6700 	(255,103,0)
 	#ff24a9 	(255,36,169)
 	#ffe700 	(255,231,0)
-	#ffffff
+    #ffffff
+    
+      -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
 */

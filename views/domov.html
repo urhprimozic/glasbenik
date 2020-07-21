@@ -1,7 +1,13 @@
 % rebase('osnova.html')
-
-TODO: Vse spodnje se prilagaja userju
-<br>
+<form action="/zgodovina/" method="POST" id="predvajaj_skladbo"></form>
 <h1>
-   Nazadnje predvajano:
+   Nazadnje predvajano
 </h1>
+<table class ="horizontalka">
+   <tr>
+      % for i, pesem in enumerate(zgodovina):
+         <td style="height: 160px;"><input onclick="loader()" type="image" class="chungus" form="predvajaj_skladbo" src="{{pesem['slika']}}" name="{{i}}"></td>
+      % end
+      </tr>
+</table>
+<
