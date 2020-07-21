@@ -1,20 +1,86 @@
 **Vsa sumljiva koda v projektu je zgolj naključje. Ustvarjalec z vsem srcem spoštuje [vse svete knjige](https://developers.google.com/youtube/terms/api-services-terms-of-service)!**
 # Glasbenik – projekt pri predmetu UVP na FMF
-
+Glasbenik je `python`ov `bottle` strežnik, ki išče in predvaja glasbo iz spletne platforme [youtube](https://www.youtube.com/).
+## Inštalacija 
+TODO
 ## Uporaba
 ### Iskanje
 Iskalnik se nahaja v desnem zgornjem kotu. Če vam rezultati ne zadoščajo, jih lahko izpišete več (gumb **NALOŽI VEČ**) ali pa pobrskate po youtubu.
 
 ![Iskanje pesmi *Chuck Berry*](https://github.com/urhprimozic/glasbenik/blob/master/README_data/iskanje.png)
 
+### Nalaganje pesmi
+V tabeli z iskanjem se na desni strani nahaja gumb za nalaganje skladb na lokalni računalnik. ![gumb download](https://github.com/urhprimozic/glasbenik/blob/master/README_data/download.png)
+
 ### Zgodovina predvajanja
 Na zavihtku **DOMOV** (zgoraj levo na orodni vrstici) se nam izriše zadnjih 50 skladb, ki smo jih poslušali. Seveda jih lahko tudi predvajamo.
 
 ![Zgodovina predvajanih pesmi](https://github.com/urhprimozic/glasbenik/blob/master/README_data/zgodovina.png)
 
+### Predvajanje glasbe na strežniku (DEV - za hekerje)
+Če se očitno spremenljivko nekje v kodi nastavi na `True`, se bo glasba predvajala na strežniku s pomočjo `vlc` in `pafy`.
+
+### Predvajanje glasbe
+Če kjerkoli pritisneš na naslovno sliko skladbe, se ta predvaja
+
+
+## Izvedba
+### Baza
+Baza vsakega uporabnika je `json` seznam slovarjev s podatki (spletni naslov, id, kanal, naslov, dolžina in slika) o posamezni pesmi.
+
+### Iskanje po bazi
+`Seja.iskanje_po_bazi(self, geslo` iz naslovov, avtorjev in iskanega gesla počisti čudne znake in jih razdeli na besede, nato pa med seboj primerja posamezne besede. Za podobnost med besedama uporablja [Levenshteinovo razdaljo](https://en.wikipedia.org/wiki/Levenshtein_distance), implementirano z bottom-up DP.
+
+### Iskanje po youtubu
+`Seja.siaknje_po_youtubu(geslo)` uporablja knjižnico `youtube-search-python`, ki na silo pridobi podatke o rezultatih, nato pa rezultate doda v bazo in požene `Seja.iskanje_po_bazi(geslo)` po posodobljeni bazi.
+
+### Nalaganje pesmi
+Glasbenik pesem naloži na strežnik v(modul `pafy`), potem pa uporabnika pošlje na naloženo pesem. Pesmi na strežniku se brišejo ob vsakem iskanju.
+
+### Izgled
+Ves CSS je moj, večinoma povzet iz *w3schools*, osnovni design pa je klasičen (kot na drugih platformah z glasbo). Efekti (animacija med čakanjem) so spisani v JavaScriptu.
+
+### Predvajanje na strežniku (DEV)
+Le uporaba modulov `vlc` in `pafy`.
+
+### Več uporabnikov
+Piškotki, sistem deluje tudi ob resetu strežnika. Storitev nagaja, če jo večkrat odpreš v istem brskalniku (recimo v dveh različnih zavihtkih), saj je to isti piškotek, in to je uporabnikova napaka.
+
+### Predvajanje glasbe
+Trenunto: embled youtube predvajalnik.
+
+**Problema**: [nagaja, če dostopaš do strežnika preko IP-ja.](https://stackoverflow.com/questions/51969269/embedded-youtube-video-doesnt-work-on-local-server) in na mobilnih napravah se med zaklepom glasba (verjetno? - nisem potstiral) ustavi.
+
+Ostale možnosti:
+1. Vsako pesem se najprej naloži na bazo, nato pa se jo od tam doda v HTML. Predvajalnik (gumbe) pa se napiše v javascriptu. **Problem**: Časovno in prostorsko požrešna rešitev. (skrbi me predvsem čas).
+2. [Predvajanje iz youtuba s pomočjo JavaScripta](https://stackoverflow.com/questions/8690255/how-to-play-only-the-audio-of-a-youtube-video-using-html-5). **Še nisem potestiral**. 
+3. Pafyjev stream s pomočjo kakšne knjižnice serviram spletni strani (recimo **pjamas**?). **Še nisem potestiral. Problem:** Veliko dela, ki ni več v pythonu. Na tem mestu bi se že bolj splačalo vse narediti v JavaScriptu.
+4. Neka python scripta na uporabnikovem koncu, ki komunicira s strežnikom in predvaja glasbo. **Problem:** Počasno in absolutno grdo ter narobe in odpade na mobilnih napravah.
+
+*Poleg tega vse rešitve razen (4) ne omogočajo, da navigacija po spletni strani ne bi prekinila glasbe. (grda rešitev bi bila, da si zapolnimo, kje smo končali s predvajanjem, vendar imaš potem vmes zamike). Lepa rešitev tega bi bila Javascript namesto Bottle, kar ni legalno. Res pa je, da bo uporabnik zelo verjetno ob predvajanju stran pustil pri miru, zato je ta pomanjkljivost irelevanta. * 
+
+
+
+## Znane napake:
+1. Kdaj pride do `BrokenPipeError` (ne obremeni uporabniške izkušnje)
+2. Kakšni linki ne delajo, ali pa so posnetki na youtubu čudne narave (poskrbljeno, da se program ne sesuje)
+3. *predvajanje s pomočjo embled youtube:* Če do strežnika dostopaš preko IP-ja namesto imena domene, ti youtube velikokrat [ne pusti emblad](https://stackoverflow.com/questions/51424578/embed-youtube-code-is-not-working-in-html). **(blazno omeji uporabniško izkušnjo)*
+
+##TODO: (pa kodo je treba sčistit)
+0. Dobro predvajanje glasbe!!
+1. Prijava, najljubše pesmi, seznami predvajanja, naključna izbira
+2. Nastavitve (če bo na voljo več različnih načinov za predvajanje glasbe)
+3. Info o projektu
+4. AWS strežnik
+5. AI za sortiranje
+
+
 .
+
 .
+
 .
+
 old readme:
 ### Rešitev za glasbene navdušence brez denarja.
 Glasbenik predvaja glasbo, ki jo najde na posnetkih [platforme youtube](https://www.youtube.com/). Predvaja samo glasbo, brez oglasov in filozofskih video vsebin. Prav tako gradi svojo bazo skladb in vam predlaga naslednji hit po njegovem izboru.
