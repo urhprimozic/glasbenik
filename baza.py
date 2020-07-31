@@ -4,6 +4,7 @@ import re
 import pafy
 import youtube_dl
 from youtubesearchpython import SearchVideos
+import random
 '''  TODO
 >fajli z os (brezveze, dokler ne začnem delat z bottle, ker bom šel takrat delat s piškotki)
 > enostavni iskalnik je počasen. Če je blo do sedaj dovolj gesel ničelnih, itak veš, da pesmi ne bo noter
@@ -205,6 +206,9 @@ class Seja:
         with open(self.lokacija_lokalne_baze, 'w') as txt:
             txt.write(json.dumps(self.baza))
             print("(zloben smeh) hahaha. vaši stari podatki so izgubljeni.")
+
+    def nakljucna_pesem(self):
+        return random.choice(self.baza)
 
     def uvozi(self, datoteka):
         '''

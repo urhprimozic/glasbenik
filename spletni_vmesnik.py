@@ -141,6 +141,23 @@ def nalozi_vec_post():
         # return bottle.template('predvajalnik.html',  get_url=bottle.url,  rezultati=seja.isci_po_bazi(seja.geslo()), id_skladbe=seja.id_trenunte_skladbe(), naslov_skladbe=seja.naslov_trenutne_skladbe())
     bottle.redirect('/')
     
+@bottle.post('/nakljucno/')# copy paste code go brrrrrrrrrrrrrrrrrrrr
+def nakljucno_post():
+    seja = pridobi_sejo()
+    pesem = seja.nakljucna_pesem()
+    if domaci_server:
+        try:
+            vlc.predvajaj_url(pesem['url'])
+        except:
+            vlc.predvajaj_url('https://www.youtube.com/watch?v=hom9faSBUHQ') 
+    else:
+        seja.nov_id_predvajane(pesem.get('id'))
+        seja.nov_naslov_predvajane(pesem.get('naslov'))
+        if seja.id_trenunte_skladbe() is None:
+            seja.nov_id_predvajane('hom9faSBUHQ') 
+    seja.dodaj_v_zgodovino(pesem)
+    bottle.redirect('/domov/')
+
 @bottle.get('/kolofon/')
 def kolofon_post():
     seja = pridobi_sejo()
