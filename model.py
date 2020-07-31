@@ -1,12 +1,11 @@
-# PAZI:
-# Model ne sme vedet za vmesnik
-# slovenske spremenljivke
 import pafy
 import vlc
-import youtube_dl # pride že avtomatično s pafiyem
+import youtube_dl 
 import os
 import shutil
 import baza
+
+
 class Predvajalnik:
     '''
     Poskrbi za magijo z moduloma vlc in pafy, da predvaja glasbo iz spletnega naslova.
@@ -25,8 +24,6 @@ class Predvajalnik:
     def predvajaj_url(self, url):
         '''
         Predvaja glasbo iz posnetka, ki se nahaja na spletnem naslovu url.
-        TODO: Trenutno odpre okno
-        Preveri internetno povezavo, preveri url
         '''
         # pafy poišče najbolšo kvaliteto za prenos v živo
         kvaliteten_url = pafy.new(url).getbestaudio().url
@@ -44,34 +41,36 @@ class Predvajalnik:
 
     def predvajaj(self):
         self.vlc_predvajalnik.play()
-    
+
     def nalozi(self, url, ime_datoteke, mesto='skladbe/'):
         '''
         Naloži glasbo iz url-ja v zapisu mp3.
         '''
         try:
-            # pafy nima možnosti za manualen filename        
-            ydl_opts = {'outtmpl': mesto + ime_datoteke + '.%(ext)s', 
-             'format': 'bestaudio/best',
-                 'postprocessors': [{
-                     'key': 'FFmpegExtractAudio',
-                     'preferredcodec': 'mp3',
-                     'preferredquality': '192',
-             }],
-    }
+            # pafy nima možnosti za manualen filename
+            ydl_opts = {'outtmpl': mesto + ime_datoteke + '.%(ext)s',
+                        'format': 'bestaudio/best',
+                        'postprocessors': [{
+                            'key': 'FFmpegExtractAudio',
+                            'preferredcodec': 'mp3',
+                            'preferredquality': '192',
+                        }],
+                        }
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 return ydl.download([url])
         except:
             return False
 
+
 def izprazni_mapo(rel):
     shutil.rmtree(rel)
-    os.makedirs(rel) 
+    os.makedirs(rel)
+
 
 class Server:
     def __init__(self):
-        self.seje = {} #slovar
-    
+        self.seje = {}  # slovar
+
     # povzeto po vislicah.
     def prost_id_seje(self):
         if len(self.seje) == 0:
@@ -84,9 +83,7 @@ class Server:
         id = self.prost_id_seje()
         ime_baze = str(id) + '.json'
         # če ime_baze obstaja, ga shutil NE ohrani
-        shutil.copyfile(glavna_baza, ime_baze)                    
+        shutil.copyfile(glavna_baza, ime_baze)
         seja = baza.Seja(lokacija=ime_baze)
         self.seje[id] = seja
-        print("Novi id", id)
         return id
-

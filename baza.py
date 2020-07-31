@@ -5,10 +5,7 @@ import pafy
 import youtube_dl
 from youtubesearchpython import SearchVideos
 import random
-'''  TODO
->fajli z os (brezveze, dokler ne začnem delat z bottle, ker bom šel takrat delat s piškotki)
-> enostavni iskalnik je počasen. Če je blo do sedaj dovolj gesel ničelnih, itak veš, da pesmi ne bo noter
-'''
+
 velikost_zgodovine = 50
 
 # TODO : a je bolš da premakneš to v bazo in rečeš @staticmethod ?
@@ -95,7 +92,6 @@ class Seja:
         self.lokacija_lokalne_baze = lokacija
         with open(lokacija, 'r') as lokalna_baza:
             self.baza = json.load(lokalna_baza)
-        # zadnje zadeve. TODO zgodovina iskanja?
         self.zadnji_rezultati = []
         self.zadnje_iskanje = []
         self.zadnje_geslo = "klemen klemen"
@@ -107,8 +103,8 @@ class Seja:
 
     def naslov_trenutne_skladbe(self):
         return self.naslov_predvajane
-    
-    def nov_naslov_predvajane(self, naslov:str):
+
+    def nov_naslov_predvajane(self, naslov: str):
         self.naslov_predvajane = naslov
 
     def id_trenunte_skladbe(self):
@@ -161,9 +157,6 @@ class Seja:
             slovar = {
                 'url': url,
                 'avtor': posnetek.author,
-                # googlu to ni všeč
-                # 'kategorija' : posnetek.category,
-                # 'kljucne_besede' : posnetek.keywords
                 'dolzina': posnetek.duration,
                 'naslov': posnetek.title,
                 'id': posnetek.videoid,
@@ -184,12 +177,9 @@ class Seja:
             # preveri, če je pesem že v bazi
             for pesem in self.baza:
                 if pesem['url'] == url:
-                    print('\033[91m'+'Pesem je že v bazi.'+'\033[0m')  # log
                     return False
             # če pesmi še ni, jo dodamo
             self.baza.append(slovar)
-            print('\033[92m'+'Pesem uspešno dodana.' +
-                  '\033[0m'+' \nNaslov: ' + slovar['naslov'])
             return True
         except youtube_dl.utils.ExtractorError:
             print("   Napaka: pesem ni dosegljiva")
@@ -205,7 +195,6 @@ class Seja:
         '''
         with open(self.lokacija_lokalne_baze, 'w') as txt:
             txt.write(json.dumps(self.baza))
-            print("(zloben smeh) hahaha. vaši stari podatki so izgubljeni.")
 
     def nakljucna_pesem(self):
         return random.choice(self.baza)
@@ -294,9 +283,8 @@ class Seja:
 
     def isci_po_youtubu(self, geslo, dodaj_v_bazo=True):
         '''
-        Uporabi modul *, in vrne prvih pi rezultatov iskanja v tabeli razredov.
+        Uporabi modul youtubesearchpython, in vrne prvih pi rezultatov iskanja v tabeli razredov.
         '''
-        print("beta verzija")
         # tabela z rezultati
         rezultati = json.loads(SearchVideos(geslo, offset=1, mode="json", max_results=10).result())[
             "search_result"]
@@ -311,17 +299,3 @@ class Seja:
         with open(datoteka, 'a') as txt:
             for i in self.baza:
                 txt.write(i['url'])
-
-# s = Seja()
-# for pesem in s.baza:
-#     try:
-#         p = pafy.new(pesem['url'])
-#     except:
-#         pesem['slika'] = '/media/default.png'
-#         continue
-#     try:
-#         pesem['slika'] = p.bigthumb
-#     except:
-#         print("Slika ni dostopna")
-#         pesem['slika'] = '/media/default.png'
-# s.posodobi_bazo_na_nasilen_nacin()
