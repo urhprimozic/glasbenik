@@ -3,7 +3,7 @@ import json
 import re
 import pafy
 import youtube_dl
-from youtubesearchpython import searchYoutube
+from youtubesearchpython import SearchVideos
 '''  TODO
 >fajli z os (brezveze, dokler ne začnem delat z bottle, ker bom šel takrat delat s piškotki)
 > enostavni iskalnik je počasen. Če je blo do sedaj dovolj gesel ničelnih, itak veš, da pesmi ne bo noter
@@ -80,7 +80,9 @@ def cistilec_nizov(niz):
     ['Elvis', 'Jackson', 'Against', 'The', 'Gravity', 'Album']
     '''
     # verjetno je regex hitrejši, pa rad bi se ga naučil uporabljat
-    return [i for i in re.sub("[^a-zA-ZčšžćđČŠŽĆĐß$€0123456789]+", " ", niz.lower()).split(" ") if i!='']
+    return [i for i in re.sub("[^a-zA-ZčšžćđČŠŽĆĐß$€0123456789]+", " ", niz.lower()).split(" ") if i != '']
+
+
 class Seja:
     ''' Skrbi za bazo trenutne seje.
     self.baza je (pythonova) kopija lokalne baze.
@@ -97,47 +99,58 @@ class Seja:
         self.zadnje_iskanje = []
         self.zadnje_geslo = "klemen klemen"
         self.zadnji_pi = 11
-        self.zgodovina = [1] # zgodovina[0] pove, kje je zadnji zapisani element
+        # zgodovina[0] pove, kje je zadnji zapisani element
+        self.zgodovina = [1]
+        self.id_predvajane = "ApU-5Oot7cI"
+        self.naslov_predvajane = "KEŠPIČKE $$$"
+
+    def naslov_trenutne_skladbe(self):
+        return self.naslov_predvajane
     
+    def nov_naslov_predvajane(self, naslov:str):
+        self.naslov_predvajane = naslov
+
+    def id_trenunte_skladbe(self):
+        return self.id_predvajane
+
+    def nov_id_predvajane(self, id: str):
+        self.id_predvajane = id
+
     def dodaj_v_zgodovino(self, pesem: dict):
         if len(self.zgodovina) <= velikost_zgodovine:
             self.zgodovina.append(pesem)
-            self.zgodovina[0] = len(self.zgodovina) -1
+            self.zgodovina[0] = len(self.zgodovina) - 1
         else:
             if self.zgodovina[0] < len(self.zgodovina) - 1:
                 self.zgodovina[0] += 1
-            else: 
+            else:
                 self.zgodovina[0] = 1
             self.zgodovina[self.zgodovina[0]] = pesem
 
-                
-    
     def zgodovina_predvajanih(self):
         '''
         Vrne seznam nazadnje predvajanih pesmi, kjer je prva pesem zadnja predvajana.
         '''
         j = self.zgodovina[0]
         ans = []
-        for i in range(len(self.zgodovina) -1):
+        for i in range(len(self.zgodovina) - 1):
             ans.append(self.zgodovina[j])
             j -= 1
             if j < 1:
-                j = len(self.zgodovina) -1
+                j = len(self.zgodovina) - 1
         return ans
 
-    
     def rezultati(self):
         return self.zadnji_rezultati
-    
+
     def iskanje(self):
         return self.zadnje_iskanje
-    
+
     def geslo(self):
         return self.zadnje_geslo
-    
+
     def pi(self):
-        return self.zadnji_pi   
-    
+        return self.zadnji_pi
 
     def dodaj_url(self, url):
         '''Doda pesem, ki se nahaja na spletnem naslovu url, v bazo seje, če je tam še ni.
@@ -152,6 +165,7 @@ class Seja:
                 # 'kljucne_besede' : posnetek.keywords
                 'dolzina': posnetek.duration,
                 'naslov': posnetek.title,
+                'id': posnetek.videoid,
             }
             # thumbnail
             try:
@@ -228,7 +242,7 @@ class Seja:
                 continue
             pesem = self.baza[i]
             kandidat = cistilec_nizov(pesem['naslov'] + ' ' + pesem['avtor'])
-            #kandidat = pesem['naslov'].lower().split() + \
+            # kandidat = pesem['naslov'].lower().split() + \
             #    pesem['avtor'].lower().split()
 
             vrednost = enostavni_iskalnik(kandidat, geslo)
@@ -237,7 +251,8 @@ class Seja:
                 rezultati_enostavno.append((pesem, vrednost))
                 # print("aa")
                 iskalni_prostor[i] = 0  # za to pesem ni potrebno levenhsteina
-        rezultati_enostavno = sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)[0:min(pi, len(rezultati_enostavno))]
+        rezultati_enostavno = sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True)[
+            0:min(pi, len(rezultati_enostavno))]
 
         # levhenstein - hočeš čim manjšega
         for i in range(len(iskalni_prostor)):
@@ -245,8 +260,8 @@ class Seja:
                 continue
             pesem = self.baza[i]
             kandidat = cistilec_nizov(pesem['naslov'] + ' ' + pesem['avtor'])
-            #kandidat = pesem['naslov'].lower().split() + \
-              #  pesem['avtor'].lower().split()
+            # kandidat = pesem['naslov'].lower().split() + \
+            #  pesem['avtor'].lower().split()
             # potrebujemo le pi rezultatov
            # if len(rezultati_enostavno) + len(rezultati_zapleteno) >= pi:
             #    break
@@ -257,7 +272,7 @@ class Seja:
             0:pi-len(rezultati_enostavno)]
         for i in rezultati_zapleteno:
             iskalni_prostor[i[2]] = 0
-        
+
         # for i in sorted(rezultati_enostavno, key=lambda x: x[1], reverse=True):
         #    print(i)
 
@@ -278,21 +293,12 @@ class Seja:
         Uporabi modul *, in vrne prvih pi rezultatov iskanja v tabeli razredov.
         '''
         print("beta verzija")
-        try:
-            # tabela z rezultati
-            rezultati = json.loads(searchYoutube(geslo, 1, "json").result())[
-                "search_result"]
-            # standrdiziranje imen. TODO ? svoja verzija modula za rezultate?
-            for i in rezultati:
-                i['url'] = i.pop('link')
-                i['naslov'] = i.pop('title')
-                i['avtor'] = i.pop('channel')
-                i['dolzina'] = i.pop('duration')
-                if dodaj_v_bazo:
-                    self.dodaj_url(i['url'])
-            return rezultati
-        except:
-            print("napaka med klicom na pesem")
+        # tabela z rezultati
+        rezultati = json.loads(SearchVideos(geslo, offset=1, mode="json", max_results=10).result())[
+            "search_result"]
+        for i in rezultati:
+            self.dodaj_url(i['link'])
+        return self.isci_po_bazi(iskano_geslo=geslo)
 
     def izvozi(self, datoteka='knjiznica.txt'):
         '''
