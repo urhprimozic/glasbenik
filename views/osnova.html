@@ -19,14 +19,10 @@
                 <!-- Orodna vrstica  -->
         <div class="orodna_vrstica">
             <a class="active" href="/domov/"><b>Domov</b></a>
-            <a href="#home">Meni</a>
-            <a href="#contact">Prijava</a>
+            <a href="/racun/">Račun</a>
+            <a href="/kolofon/">O projektu</a>
             <div class="iskalnik">
                 <form action="/isci/" method="GET">
-                    <!--Razlaga grde kode okoli forme backend 
-
-
-                    -->
                 <input type="text" placeholder="Išči po bazi.." name="iskalno_okno">
                 <button type="submit"><i class="fa fa-search"></i></button>
                 </form>
@@ -34,5 +30,20 @@
         </div>
 
         {{!base}}
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <!--  -->
+        <div style="position:fixed;bottom: 0;height:40px;overflow:hidden;width: 100%;">
+            <div style="position:absolute;top:-60px;width: 100%;">
+            <iframe width=100% height="100px" 
+              src={{"https://www.youtube.com/embed/" + id_skladbe + "?autoplay=1"}}>
+            </iframe>
+            </div>
+            <div style="position:absolute;width: 100%;background-color: black; left: 10%; height:85%; top: 5%;color: #ffcc33;text-align: center;"><h1 style="color: #ffcc33;margin-top: 0;font-size: 150%;font-family: 'Raleway', sans-serif;"><b>{{naslov_skladbe}}</b></h1></div>
+         </div>
     </body>
 </html>
