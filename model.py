@@ -1,6 +1,6 @@
 import pafy
 import vlc
-import youtube_dl 
+import youtube_dl
 import os
 import shutil
 import baza
@@ -16,7 +16,7 @@ class Predvajalnik:
         self.vlc_instance = vlc.Instance()
         self.vlc_predvajalnik = self.vlc_instance.media_player_new()
 
-    def predvajaj_url(self, url : str):
+    def predvajaj_url(self, url: str):
         '''
         Predvaja glasbo iz posnetka, ki se nahaja na spletnem naslovu url.
 
@@ -24,7 +24,7 @@ class Predvajalnik:
         ----------
         url : str
             spletni naslov posnetka
-        
+
         Returns
         -------
         None
@@ -46,7 +46,7 @@ class Predvajalnik:
     def predvajaj(self):
         self.vlc_predvajalnik.play()
 
-    def nalozi(self, url : str, ime_datoteke : str, mesto='skladbe/'):
+    def nalozi(self, url: str, ime_datoteke: str, mesto='skladbe/'):
         '''
         Naloži glasbo iz url-ja v zapisu mp3.
 
@@ -54,10 +54,10 @@ class Predvajalnik:
         ----------
         url : str
             Spletni naslov pesmi.
-        
+
         ime_datoteke : str
             Ime datoteke, kamor naj shrani pesem
-        
+
         mesto : str
 
         '''
@@ -77,7 +77,7 @@ class Predvajalnik:
             return False
 
 
-def izprazni_mapo(rel : str):
+def izprazni_mapo(rel: str):
     '''
     Izprazne mapo na lokaciji rel.
     Parameters
@@ -91,10 +91,12 @@ def izprazni_mapo(rel : str):
     shutil.rmtree(rel)
     os.makedirs(rel)
 
+
 class Server:
     '''
     Objekt, ki skrbi za serviranje zadev uporabnikom.
     '''
+
     def __init__(self):
         self.seje = {}  # slovar
 

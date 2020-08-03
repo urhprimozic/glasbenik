@@ -11,7 +11,7 @@ velikost_zgodovine = 50
 # TODO : a je bolš da premakneš to v bazo in rečeš @staticmethod ?
 
 
-def enostavni_iskalnik(kandidat : list, geslo : list):
+def enostavni_iskalnik(kandidat: list, geslo: list):
     '''
     Pogleda, koliko besed iz gelsa se skriva v kandidatu. 
 
@@ -19,10 +19,10 @@ def enostavni_iskalnik(kandidat : list, geslo : list):
     ----------
     kandidat : list
         Seznam besed (str)
-    
+
     geslo : list
         seznam iskanih besed
-    
+
     Returns
     -------
     Vrednost : int
@@ -49,11 +49,11 @@ def enostavni_iskalnik(kandidat : list, geslo : list):
 def levenshtein(a, b):
     '''
     Vrne Levenshteinovo razdaljo med nizom a in nizom b.
-    
+
     Parametra
     ---------
     a, b : str
-    
+
     Returns
     -------
     levenshtein distacne (int)

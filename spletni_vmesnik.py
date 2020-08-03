@@ -71,7 +71,7 @@ def predvajaj(pesem: dict, seja):
     ----------
     pesem : dict
         Slovar pesmi
-    
+
     seja : baza.Seja
         Uporabnikova seja
 
@@ -199,6 +199,7 @@ def kolofon_post():
 
 # konec
 # bottle.run(debug=True, reloader=True, host='localhost') # DEV opcije
-bottle.run(host='localhost') # POZOR! embed youtube teži, če je host IP address! Trik za domači server je uporaba localhosta. 
+# POZOR! embed youtube teži, če je host IP address! Trik za domači server je uporaba localhosta.
+bottle.run(host='localhost')
 # na resnem serveju bo verjetno delalo tudi , če bo host="0.0.0.0", samo, da uporabnik do njega dostopa preko imena domene (baje)
 #  vir: https://stackoverflow.com/questions/51969269/embedded-youtube-video-doesnt-work-on-local-server
