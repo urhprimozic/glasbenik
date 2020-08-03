@@ -2,7 +2,6 @@ import bottle
 import baza
 import model
 import re
-import json
 # vsako zdravilo za raka je rak
 
 # BAZA
@@ -18,6 +17,15 @@ SKRIVNOST = "42x69eq420"  # zastonj priložnost za jazjaz
 def id():
     '''
     Vrne id uporabnikove seje, ali pa ustvari novo sejo in vrnje njen id.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    ans : int
+        Id seje trenuntnega uporabnika.
     '''
     try:
         ans = int(bottle.request.get_cookie('id_seje', secret=SKRIVNOST))
@@ -33,6 +41,18 @@ def id():
 
 
 def pridobi_sejo():
+    '''
+    Vrne sejo trenuntnega uporabnika.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    ans : baza.Seja
+        Seja trenuntega uporabnika
+    '''
     ans = server.seje.get(id())
     if ans is None:
         index = server.nova_seja()
@@ -41,6 +61,36 @@ def pridobi_sejo():
         ans = server.seje[index]
 
     return ans
+
+
+def predvajaj(pesem: dict, seja):
+    '''
+    Predvaja pesem.
+
+    Parameters
+    ----------
+    pesem : dict
+        Slovar pesmi
+    
+    seja : baza.Seja
+        Uporabnikova seja
+
+    Returns
+    -------
+    None
+    '''
+    if domaci_server:
+        try:
+            vlc.predvajaj_url(pesem['url'])
+        except:
+            vlc.predvajaj_url(
+                'https://www.youtube.com/watch?v=hom9faSBUHQ')  # bolana šala
+    else:
+        seja.nov_id_predvajane(pesem.get('id'))
+        seja.nov_naslov_predvajane(pesem.get('naslov'))
+        if seja.id_trenunte_skladbe() is None:
+            # ta šala ful kašla pa slabo ji je
+            seja.nov_id_predvajane('hom9faSBUHQ')
 
 # poti do map
 
@@ -62,6 +112,9 @@ def server_static(filename):
 
 @bottle.get('/')
 def index():
+    '''
+    Naslovna stran
+    '''
     seja = pridobi_sejo()
     return bottle.template('predvajalnik.html',  get_url=bottle.url, rezultati=seja.rezultati(), id_skladbe=seja.id_trenunte_skladbe(), naslov_skladbe=seja.naslov_trenutne_skladbe())
 
@@ -95,21 +148,7 @@ def nalozi_post():
 def zgodovina_post():
     seja = pridobi_sejo()
     index_skladbe = int(list(bottle.request.forms.keys())[0].split('.')[0])
-    if domaci_server:
-        try:
-            vlc.predvajaj_url(seja.zgodovina_predvajanih()
-                              [index_skladbe]['url'])
-        except:
-            vlc.predvajaj_url(
-                'https://www.youtube.com/watch?v=hom9faSBUHQ')  # bolana šala
-    else:
-        seja.nov_id_predvajane(seja.zgodovina_predvajanih()[
-                               index_skladbe].get('id'))
-        seja.nov_naslov_predvajane(seja.zgodovina_predvajanih()[
-                                   index_skladbe].get('naslov'))
-        if seja.id_trenunte_skladbe() is None:
-            # ta šala ful kašla pa slabo ji je
-            seja.nov_id_predvajane('hom9faSBUHQ')
+    predvajaj(seja.zgodovina_predvajanih()[index_skladbe], seja)
     bottle.redirect('/domov/')
 
 
@@ -118,26 +157,13 @@ def predvajaj_get():
     seja = pridobi_sejo()
     index_skladbe = int(list(bottle.request.forms.keys())[0].split('.')[0])
     seja.dodaj_v_zgodovino(seja.rezultati()[index_skladbe])
-    if domaci_server:
-        try:
-            vlc.predvajaj_url(seja.rezultati()[index_skladbe]['url'])
-        except:
-            # šla je na ustnega brez maske
-            vlc.predvajaj_url('https://www.youtube.com/watch?v=hom9faSBUHQ')
-    else:
-        seja.nov_id_predvajane(seja.rezultati()[index_skladbe].get('id'))
-        seja.nov_naslov_predvajane(
-            seja.rezultati()[index_skladbe].get('naslov'))
-        if seja.id_trenunte_skladbe() is None:
-            # ta šala ima aids in tuberkulozo
-            seja.nov_id_predvajane('hom9faSBUHQ')
+    predvajaj(seja.rezultati()[index_skladbe], seja)
     bottle.redirect('/')
 
 
 @bottle.get('/domov/')
 def domov_get():
     seja = pridobi_sejo()
-    # TODO: posebna stran za domov - predlogi itd
     return bottle.template('domov.html',  get_url=bottle.url, zgodovina=seja.zgodovina_predvajanih(), id_skladbe=seja.id_trenunte_skladbe(), naslov_skladbe=seja.naslov_trenutne_skladbe())
 
 
@@ -150,12 +176,9 @@ def nalozi_vec_post():
             seja.geslo(), iskalni_prostor=seja.iskanje(), pi=seja.pi() + 10)
     else:
         seja.isci_po_youtubu(seja.geslo())
-        # TODO: ne bit tko nasilen
         seja.posodobi_bazo_na_nasilen_nacin()
         seja.isci_po_bazi(
             seja.geslo(), iskalni_prostor=seja.iskanje(), pi=seja.pi())
-        # zdaj najprej zlovfdamo, nato pa iščemo  z našim algoritmom..
-        # return bottle.template('predvajalnik.html',  get_url=bottle.url,  rezultati=seja.isci_po_bazi(seja.geslo()), id_skladbe=seja.id_trenunte_skladbe(), naslov_skladbe=seja.naslov_trenutne_skladbe())
     bottle.redirect('/')
 
 
@@ -163,16 +186,7 @@ def nalozi_vec_post():
 def nakljucno_post():
     seja = pridobi_sejo()
     pesem = seja.nakljucna_pesem()
-    if domaci_server:
-        try:
-            vlc.predvajaj_url(pesem['url'])
-        except:
-            vlc.predvajaj_url('https://www.youtube.com/watch?v=hom9faSBUHQ')
-    else:
-        seja.nov_id_predvajane(pesem.get('id'))
-        seja.nov_naslov_predvajane(pesem.get('naslov'))
-        if seja.id_trenunte_skladbe() is None:
-            seja.nov_id_predvajane('hom9faSBUHQ')
+    predvajaj(pesem, seja)
     seja.dodaj_v_zgodovino(pesem)
     bottle.redirect('/domov/')
 
@@ -184,4 +198,7 @@ def kolofon_post():
 
 
 # konec
-bottle.run(debug=True, reloader=True, host='localhost')
+# bottle.run(debug=True, reloader=True, host='localhost') # DEV opcije
+bottle.run(host='localhost') # POZOR! embed youtube teži, če je host IP address! Trik za domači server je uporaba localhosta. 
+# na resnem serveju bo verjetno delalo tudi , če bo host="0.0.0.0", samo, da uporabnik do njega dostopa preko imena domene (baje)
+#  vir: https://stackoverflow.com/questions/51969269/embedded-youtube-video-doesnt-work-on-local-server

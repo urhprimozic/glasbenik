@@ -11,13 +11,27 @@ velikost_zgodovine = 50
 # TODO : a je bolš da premakneš to v bazo in rečeš @staticmethod ?
 
 
-def enostavni_iskalnik(kandidat, geslo):
+def enostavni_iskalnik(kandidat : list, geslo : list):
     '''
     Pogleda, koliko besed iz gelsa se skriva v kandidatu. 
-    Če uporabnik ne dela slovničnih napak, dokaj efektiven pristop.
-    Vrne približno oceno ustreznosti me TODO
-    >>> enostavni_iskalnik(["TooDamnFilthy", "pink", "guy", "sax"],["Filthy", "Frank"])
-    2
+
+    Parameters
+    ----------
+    kandidat : list
+        Seznam besed (str)
+    
+    geslo : list
+        seznam iskanih besed
+    
+    Returns
+    -------
+    Vrednost : int
+        vrednost je število >= 0, enako št. pojavitev * 5
+
+    Uporaba
+    -------
+    >>> enostavni_iskalnik(["janez", "janša", "luka", "mesec"],["janez", "luka", "klemenklemen"])
+    10
     '''
     # vrednost pove, koliko je kandidat po tem enostavnem kriteriju podoben geslu
     vrednost = 0
@@ -35,9 +49,19 @@ def enostavni_iskalnik(kandidat, geslo):
 def levenshtein(a, b):
     '''
     Vrne Levenshteinovo razdaljo med nizom a in nizom b.
-    >>> evenshtein('riba', 'miza')
+    
+    Parametra
+    ---------
+    a, b : str
+    
+    Returns
+    -------
+    levenshtein distacne (int)
+
+    Uporaba
+    -------
+    >>> levenshtein('riba', 'miza')
     2
-    Več: https://en.wikipedia.org/wiki/Levenshtein_distance
     '''
     # Ix2 matrika, dinnamično programiranje
     I = len(a)
@@ -70,10 +94,17 @@ def zapleteni_iskalnik(kandidat, geslo):
 
 def cistilec_nizov(niz):
     '''
-    niz - str
     Vzame niz in vrne tabelo besed, pisanih z malimi črkami iz niza. Vse znake, ki niso črke, vrže ven.
     Simbola € in $ pusti, ker se večkrat pojavljata v glasbah,
     Simbol & pa ne, saj je po navadi uporabljen brez sosednjih presledkov.
+
+    Parameter
+    ---------
+    niz : str
+
+    Returns
+    -------
+    tabela : list
     >>> cistilec_nizov("Elvis Jackson-Against The Gravity(Album)")
     ['Elvis', 'Jackson', 'Against', 'The', 'Gravity', 'Album']
     '''
@@ -83,9 +114,6 @@ def cistilec_nizov(niz):
 
 class Seja:
     ''' Skrbi za bazo trenutne seje.
-    self.baza je (pythonova) kopija lokalne baze.
-    Struktura:
-     [{ Slovar o pesmi} ] <-- seznam pesmi
     '''
 
     def __init__(self, lokacija='baza.json'):

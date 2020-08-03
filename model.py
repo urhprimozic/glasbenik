@@ -8,22 +8,26 @@ import baza
 
 class Predvajalnik:
     '''
-    Poskrbi za magijo z moduloma vlc in pafy, da predvaja glasbo iz spletnega naslova.
-    Trenutno zna:
-        > predvajaj_url(url)
+    Predvaja glasbo s spletnega naslova v VCL predvajalniku.
     '''
 
     def __init__(self):
         self.trenutna_pesem = None
-
-        # zažene vlc
-        # Običaj za poimenovanje te spremenljivkle je instance, prevod bi bil čuden
         self.vlc_instance = vlc.Instance()
         self.vlc_predvajalnik = self.vlc_instance.media_player_new()
 
-    def predvajaj_url(self, url):
+    def predvajaj_url(self, url : str):
         '''
         Predvaja glasbo iz posnetka, ki se nahaja na spletnem naslovu url.
+
+        Parameters
+        ----------
+        url : str
+            spletni naslov posnetka
+        
+        Returns
+        -------
+        None
         '''
         # pafy poišče najbolšo kvaliteto za prenos v živo
         kvaliteten_url = pafy.new(url).getbestaudio().url
@@ -42,9 +46,20 @@ class Predvajalnik:
     def predvajaj(self):
         self.vlc_predvajalnik.play()
 
-    def nalozi(self, url, ime_datoteke, mesto='skladbe/'):
+    def nalozi(self, url : str, ime_datoteke : str, mesto='skladbe/'):
         '''
         Naloži glasbo iz url-ja v zapisu mp3.
+
+        Parameters
+        ----------
+        url : str
+            Spletni naslov pesmi.
+        
+        ime_datoteke : str
+            Ime datoteke, kamor naj shrani pesem
+        
+        mesto : str
+
         '''
         try:
             # pafy nima možnosti za manualen filename
@@ -62,23 +77,50 @@ class Predvajalnik:
             return False
 
 
-def izprazni_mapo(rel):
+def izprazni_mapo(rel : str):
+    '''
+    Izprazne mapo na lokaciji rel.
+    Parameters
+    ----------
+    rel : str
+        lokacija mape
+    Returns
+    -------
+    None
+    '''
     shutil.rmtree(rel)
     os.makedirs(rel)
 
-
 class Server:
+    '''
+    Objekt, ki skrbi za serviranje zadev uporabnikom.
+    '''
     def __init__(self):
         self.seje = {}  # slovar
 
     # povzeto po vislicah.
     def prost_id_seje(self):
+        ''' 
+        Vrne prost id seje.
+        '''
         if len(self.seje) == 0:
             return 0
         else:
             return max(self.seje.keys()) + 1
 
     def nova_seja(self, glavna_baza='baza.json'):
+        '''
+        Ustvari novo sejo.
+
+        Parameters
+        ----------
+        glavna_baza : str
+            datoteka - baza, po kateri naj seja brska
+        Returns
+        -------
+        id : int
+            Id seje.
+        '''
         # vsak dobi SVOJO bazo
         id = self.prost_id_seje()
         ime_baze = str(id) + '.json'
