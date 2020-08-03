@@ -12,6 +12,8 @@ pip3 install pafy
 pip3 install python-vlc
 ``` 
 ## Uporaba
+Strežnik se nahaja v datoteki `spletni_vmesnik.py`, zaženemo pa ga lahko z ukazom `python3 -i spletni_vmesnik.py`.
+
 ### Iskanje
 Iskalnik se nahaja v desnem zgornjem kotu. Če vam rezultati ne zadoščajo, jih lahko izpišete več (gumb **NALOŽI VEČ**) ali pa pobrskate po youtubu.
 
@@ -43,8 +45,8 @@ Program uporablja knjižnico `youtube-search-python`, ki na silo pridobi podatke
 ### Nalaganje pesmi
 Glasbenik pesem naloži na strežnik v(modul `pafy`), potem pa uporabnika pošlje na naloženo pesem. Pesmi na strežniku se brišejo ob vsakem iskanju.
 
-### Design
-Ves CSS je moj, večinoma povzet iz *w3schools*, osnovni design pa je klasičen (kot na drugih platformah z glasbo). Efekti (animacija med čakanjem) so spisani v JavaScriptu.
+### Dizajn
+Ves CSS je moj, večinoma povzet iz *w3schools*, osnovni dizajn pa je klasičen (kot na drugih platformah z glasbo). Efekti (animacija med čakanjem) so spisani v JavaScriptu.
 
 
 
@@ -52,7 +54,7 @@ Ves CSS je moj, večinoma povzet iz *w3schools*, osnovni design pa je klasičen 
 Piškotki, sistem deluje tudi ob resetu strežnika. Storitev nagaja, če jo večkrat odpreš v istem brskalniku (recimo v dveh različnih zavihtkih), saj je to isti piškotek, in to je uporabnikova napaka.
 
 ### Predvajanje glasbe
-Glasba se predvaja s pomočjo emded youtube predvajalnika.
+Glasba se predvaja s pomočjo embed youtube predvajalnika.
 
 ### Predvajanje glasbe na strežniku (DEV - za hekerje)
 Če se očitno spremenljivko nekje v kodi nastavi na `True`, se bo glasba predvajala na strežniku s pomočjo `vlc` in `pafy`.
